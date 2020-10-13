@@ -7,12 +7,16 @@
 
 #include <xc.h>
 
-void main(int argc, char** argv) {
-    
-    TRISBbits.TRISB8 = 0;
-    while(1){
-        LATBbits.LATB9 = 1;
-    }
+#include "IOs.h"
+
+
+// Main is the first thing that the MCU will load
+
+void main(void) {
+
+    IOinit();
+
+    IOcheck();
 
     return;
 }
