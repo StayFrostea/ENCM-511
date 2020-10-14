@@ -34,4 +34,4 @@ MP_AS_DIR="/Applications/microchip/xc16/v1.60/bin"
 MP_LD_DIR="/Applications/microchip/xc16/v1.60/bin"
 MP_AR_DIR="/Applications/microchip/xc16/v1.60/bin"
 # MP_BC_DIR is not defined
-DFP_DIR=/Applications/microchip/mplabx/v5.40/packs/Microchip/PIC24F-KA-KL-KM_DFP/1.3.49
+DFP_DIR=/Users/user/.mchp_packs/Microchip/PIC24F-KA-KL-KM_DFP/1.4.83

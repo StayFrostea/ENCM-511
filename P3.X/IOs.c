@@ -8,6 +8,8 @@
 
 #include "xc.h"
 
+//unsigned int GlobalVar;
+
 void IOinit(void) {
     //Digital Output
     TRISBbits.TRISB8 = 0;

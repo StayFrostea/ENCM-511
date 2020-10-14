@@ -14,5 +14,8 @@
 void IOinit(void);
 void IOcheck(void);
 
+////Declaring global variables
+//extern unsigned int GlobalVar;
+
 #endif	/* XC_HEADER_TEMPLATE_H */
 

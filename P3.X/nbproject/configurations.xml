@@ -36,7 +36,7 @@
         <platform>4</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC24F-KA-KL-KM_DFP" vendor="Microchip" version="1.3.49"/>
+        <pack name="PIC24F-KA-KL-KM_DFP" vendor="Microchip" version="1.4.83"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -235,8 +235,6 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-2bff"/>
         <property key="poweroptions.powerenable" value="true"/>
-        <property key="programmerToGoFilePath"
-                  value="/Users/user/Documents/Class/ENCM 511/PIC_Projetcs/Group_Projects/ENCM-511/P3.X/debug/default/P3_ptg"/>
         <property key="programmerToGoImageName" value="P3_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
@@ -263,8 +261,7 @@
         <property key="ptgSendImage" value="true"/>
         <property key="toolpack.updateoptions"
                   value="toolpack.updateoptions.uselatestoolpack"/>
-        <property key="toolpack.updateoptions.packversion"
-                  value="Press to select which tool pack to use"/>
+        <property key="toolpack.updateoptions.packversion" value="1.1.774"/>
         <property key="voltagevalue" value="3.25"/>
       </pk4hybrid>
     </conf>
