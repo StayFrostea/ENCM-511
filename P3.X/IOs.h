@@ -19,4 +19,3 @@ void IOrun(void);
 //extern unsigned int GlobalVar;
 
 #endif	/* XC_HEADER_TEMPLATE_H */
-
