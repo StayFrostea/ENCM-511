@@ -6,6 +6,7 @@
  */
 
 #include <xc.h>
+#include <time.h>
 
 #include "IOs.h"
 
@@ -21,7 +22,9 @@ void main(void) {
 
     IOinit();
     
-    IOcheck();
+//    IOcheck();
+    
+    IOrun();
 
     return;
 }
