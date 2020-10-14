@@ -22,7 +22,6 @@ void IOinit(void) {
 void IOcheck(void) {
 
     while (1) {
-        IOcheck();
         while (PORTAbits.RA4 == 0) {
             LATBbits.LATB8 = 1;
         }
