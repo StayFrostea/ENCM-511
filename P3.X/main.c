@@ -22,9 +22,9 @@ void main(void) {
 
     IOinit();
     
-//    IOcheck();
-    
-    IOrun();
+    IOcheck();
+//    
+//    IOrun();
 
     return;
 }

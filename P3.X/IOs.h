@@ -12,8 +12,8 @@
 #endif /* __cplusplus */
 
 void IOinit(void);
-//void IOcheck(void);
-void IOrun(void);
+void IOcheck(void);
+//void IOrun(void);
 
 ////Declaring global variables
 //extern unsigned int GlobalVar;
