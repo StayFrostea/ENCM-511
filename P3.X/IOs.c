@@ -90,7 +90,7 @@ void IOrun(void) {
             while (1) {
                 flashOne();
                 if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 1) {
-                    LATBbits.LATB8 = 0;
+                    offConstant();
                     break;
                 }
             }
@@ -99,7 +99,7 @@ void IOrun(void) {
             while (1) {
                 flashTwo();
                 if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 1) {
-                    LATBbits.LATB8 = 0;
+                    offConstant();
                     break;
                 }
             }
@@ -108,7 +108,7 @@ void IOrun(void) {
             while (1) {
                 flashThree();
                 if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 0) {
-                    LATBbits.LATB8 = 0;
+                    offConstant();
                     break;
                 }
             }
@@ -117,7 +117,7 @@ void IOrun(void) {
             while (1) {
                 onConstant();
                 if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 0) {
-                    LATBbits.LATB8 = 0;
+                    offConstant();
                     break;
                 }
             }
@@ -126,7 +126,7 @@ void IOrun(void) {
             while (1) {
                 onConstant();
                 if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 1) {
-                    LATBbits.LATB8 = 0;
+                    offConstant();
                     break;
                 }
             }
@@ -135,7 +135,7 @@ void IOrun(void) {
             while (1) {
                 offConstant();
                 if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 0) {
-                    LATBbits.LATB8 = 0;
+                    offConstant();
                     break;
                 }
             }
@@ -144,7 +144,7 @@ void IOrun(void) {
             while (1) {
                 onConstant();
                 if (PORTAbits.RA2 == 1 || PORTAbits.RA4 == 1 || PORTBbits.RB4 == 1) {
-                    LATBbits.LATB8 = 0;
+                    offConstant();
                     break;
                 }
             }
