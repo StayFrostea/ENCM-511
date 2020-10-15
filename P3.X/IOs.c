@@ -10,6 +10,9 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+//This CPU is 8MHz
+//Clock speed / speed of PC incrementation / amount of cycles of clock per instruction
+//8MHz / 2 cycles per incrementation / 2 cycles per instruction = 2MHz
 #define FCY 2000000UL
 #include <libpic30.h>
 
