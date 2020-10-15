@@ -10,7 +10,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define FCY 4000000UL
+#define FCY 2000000UL
 #include <libpic30.h>
 
 void IOinit(void) {
