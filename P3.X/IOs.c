@@ -75,7 +75,7 @@ void onConstant(void) {
     LATBbits.LATB8 = 1;
 }
 
-void offConstant(void){
+void offConstant(void) {
     //stays off
     LATBbits.LATB8 = 0;
 }
@@ -86,46 +86,67 @@ void IOrun(void) {
 
     while (1) {
 
-        if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 0) {
-            flashOne();
-            if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 0) {
-                break;
+        if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 1) {
+            while (1) {
+                flashOne();
+                if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 1) {
+                    LATBbits.LATB8 = 0;
+                    break;
+                }
             }
 
-        } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0) {
-            flashTwo();
-            if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 0) {
-                break;
-            }
-
-        } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1) {
-            flashThree();
-            if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 0) {
-                break;
-            }
-
-        } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 1) {
-            onConstant();
-            if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 1) {
-                break;
+        } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1) {
+            while (1) {
+                flashTwo();
+                if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 1) {
+                    LATBbits.LATB8 = 0;
+                    break;
+                }
             }
 
         } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0) {
-            onConstant();
-            if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 0) {
-                break;
+            while (1) {
+                flashThree();
+                if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 0) {
+                    LATBbits.LATB8 = 0;
+                    break;
+                }
             }
 
-        } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 0) {
-            offConstant();
-            if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 0) {
-                break;
+        } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 0) {
+            while (1) {
+                onConstant();
+                if (PORTAbits.RA2 != 1 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 0) {
+                    LATBbits.LATB8 = 0;
+                    break;
+                }
+            }
+
+        } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1) {
+            while (1) {
+                onConstant();
+                if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 0 || PORTBbits.RB4 != 1) {
+                    LATBbits.LATB8 = 0;
+                    break;
+                }
+            }
+
+        } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0) {
+            while (1) {
+                offConstant();
+                if (PORTAbits.RA2 != 0 || PORTAbits.RA4 != 1 || PORTBbits.RB4 != 0) {
+                    LATBbits.LATB8 = 0;
+                    break;
+                }
             }
 
         } else {
-            onConstant();
-            if (PORTAbits.RA2 == 0 || PORTAbits.RA4 == 0 || PORTBbits.RB4 == 0) {
-                break;
+            while (1) {
+                onConstant();
+                if (PORTAbits.RA2 == 1 || PORTAbits.RA4 == 1 || PORTBbits.RB4 == 1) {
+                    LATBbits.LATB8 = 0;
+                    break;
+                }
             }
         }
     }
