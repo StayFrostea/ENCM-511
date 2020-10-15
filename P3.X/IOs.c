@@ -46,27 +46,28 @@ void delay(int n) {
 
 void flashOne(void) {
     //1 second on/off pattern
-    LATBbits.LATB8 = 1;
-    delay(1);
+    delay(3);
     LATBbits.LATB8 = 0;
-    delay(1);
+    delay(3);
+    LATBbits.LATB8 = 1;
 }
 
 void flashTwo(void) {
     //2 second on/off pattern
-    LATBbits.LATB8 = 1;
-    delay(2);
+
+    delay(6);
     LATBbits.LATB8 = 0;
-    delay(2);
+    delay(6);
+    LATBbits.LATB8 = 1;
     
 }
 
 void flashThree(void) {
     //3 second on/off pattern
-    LATBbits.LATB8 = 1;
-    delay(3);
+    delay(9);
     LATBbits.LATB8 = 0;
-    delay(3);
+    delay(9);
+    LATBbits.LATB8 = 1;
 }
 
 void onConstant(void) {
@@ -125,4 +126,3 @@ void IOrun(void) {
     }
     return;
 }
-
