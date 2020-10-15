@@ -44,37 +44,68 @@ void delay(int n) {
 
 }
 
+void flashOne(void){
+    //1 second on/off pattern
+            LATBbits.LATB8 = 1;
+            delay(1);
+            LATBbits.LATB8 = 0;
+            delay(1);
+}
+
+void flashTwo(void){
+    //2 second on/off pattern
+            LATBbits.LATB8 = 1;
+            delay(2);
+            LATBbits.LATB8 = 0;
+            delay(2);
+}
+
+void flashThree(void){
+    //3 second on/off pattern
+            LATBbits.LATB8 = 1;
+            delay(3);
+            LATBbits.LATB8 = 0;
+            delay(3);
+}
+
+void flashConstant(void){
+    //stays on
+            LATBbits.LATB8 = 0;
+}
 void IOrun(void) {
 
     while (1) {
         LATBbits.LATB8 = 0;
         if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 0) {
-            //3 second on/off pattern
-            LATBbits.LATB8 = 0;
-            delay(1);
-            LATBbits.LATB8 = 1;
-            delay(1);
+            while(PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 0){
+                flashOne();
+            }
+            
         } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0) {
-            //3 second on/off pattern
-            LATBbits.LATB8 = 0;
-            delay(2);
-            LATBbits.LATB8 = 1;
-            delay(2);
+            while(PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0){
+                flashTwo();
+            }
+            
         } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1) {
-            //3 second on/off pattern
-            LATBbits.LATB8 = 0;
-            delay(3);
-            LATBbits.LATB8 = 1;
-            delay(3);
+            while(PORTAbits.RA2 == 0 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1){
+                flashThree();
+            }
+            
         } else if (PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 1) {
-            //stays on
-            LATBbits.LATB8 = 0;
+            while(PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 1){
+                flashConstant();
+            }
+           
         } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 0) {
-            //stays on
-            LATBbits.LATB8 = 0;
+            while(PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 1){
+                flashConstant();
+            }
+            
         } else if (PORTAbits.RA2 == 1 && PORTAbits.RA4 == 0 && PORTBbits.RB4 == 1) {
-            //stays on
-            LATBbits.LATB8 = 0;
+            while(PORTAbits.RA2 == 0 && PORTAbits.RA4 == 1 && PORTBbits.RB4 == 1){
+                flashConstant();
+            }
+            
         } else
             LATBbits.LATB8 = 1;
     }
