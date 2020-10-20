@@ -223,10 +223,10 @@ __FDS
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x1162
+.debug_info       0x000000       0x1174
  *(.debug_info)
- .debug_info      0x000000       0x10ca build/default/production/IOs.o
- .debug_info      0x0010ca         0x98 build/default/production/main.o
+ .debug_info      0x000000       0x10d3 build/default/production/IOs.o
+ .debug_info      0x0010d3         0xa1 build/default/production/main.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev     0x000000        0x18c

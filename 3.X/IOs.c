@@ -77,7 +77,7 @@ void Delay_ms(uint16_t time_ms){
     T2CONbits.T32=0;//Timer2 and 3 act as two 16-bit timers
     T2CONbits.TCS=0;//Use internal clock
 
-    TMR2=0;
+    TMR2=0;//Clear TMR2
     
     //Interrupt configuration
     IEC0bits.T2IE=1;//Enable interrupt
@@ -85,8 +85,8 @@ void Delay_ms(uint16_t time_ms){
     
     T2CONbits.TON=1;//Start 16-bit Timer2
     
-    PR2=16*time_ms;
-    Idle();
+    PR2=16*time_ms;//Calculate PR2
+    Idle();//Switch to idle mode
     
     return;
 }
