@@ -138,12 +138,12 @@ void IOcheck(void) {
             LATBbits.LATB8 = 1;//LED on
             Disp2String("\r                       ");//clear the terminate to prepare for update
             break;
-        case 10: //no button is pressed
+        case 10: //PB1 AND PB3
             Disp2String("\rPB1 AND PB3 are pressed");//print the required string
             LATBbits.LATB8 = 1;//LED on
             Disp2String("\r                       ");//clear the terminate to prepare for update
             break;
-        case 1: //no button is pressed
+        case 1: //PB1 AND PB2
             Disp2String("\rPB1 AND PB2 are pressed");//print the required string
             LATBbits.LATB8 = 1;//LED on
             Disp2String("\r                       ");//clear the terminate to prepare for update
