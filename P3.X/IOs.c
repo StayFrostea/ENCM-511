@@ -30,27 +30,43 @@ void IOinit(void) {
     CNPU2bits.CN30PUE = 1;//RA2 pullup
 }
 
+
+// This is a delay that can be used instead of __delay_ms if neccesary
+//void delay(int n){
+//    if(n==0)
+//        return;
+//    else
+//    {
+//        unsigned int count = 0;
+//        //4000 operations per second is how many times the PC updates
+//        while(count<(n*4000)){
+//            count++;
+//        }
+//    }
+//    delay(n-1);
+//}
+
 void IOcheck(void) {
     while(1){
         unsigned int c=PORTAbits.RA2*100+PORTAbits.RA4*10+PORTBbits.RB4; //generate a case number
         switch(c){
             case 11: //only PB1 is pressed
                 LATBbits.LATB8 = 1;//LED on
-                __delay_ms(1000);//delay for 1 second
+                __delay_ms(1000);
                 LATBbits.LATB8 = 0;//LED off
-                __delay_ms(1000);//delay for 1 second
+                __delay_ms(1000);
                 break;
             case 101: //only PB2 is pressed
                 LATBbits.LATB8 = 1;//LED on
-                __delay_ms(2000);//delay for 2 second
+                __delay_ms(2000);
                 LATBbits.LATB8 = 0;//LED off
-                __delay_ms(2000);//delay for 2 second
+                __delay_ms(2000);
                 break;
             case 110: //only PB3 is pressed
                 LATBbits.LATB8 = 1;//LED on
-                __delay_ms(3000);//delay for 3 second
+                __delay_ms(3000);
                 LATBbits.LATB8 = 0;//LED off//LED off
-                __delay_ms(3000);//delay for 3 second
+                __delay_ms(3000);
                 break;
             case 111: //no button is pressed
                 LATBbits.LATB8 = 0;//LED off
