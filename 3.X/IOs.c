@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <errno.h>
+#include "UART2.h"
 
 #include "IOs.h"
 
@@ -66,6 +67,9 @@ void IOinit(void) {
     CNPU1bits.CN0PUE = 1;//RA4 pullup
     CNPU1bits.CN1PUE = 1;//RB4 pullup
     CNPU2bits.CN30PUE = 1;//RA2 pullup
+    
+    //32Khz clock
+    NewClk(32);
 }
 
 void Delay_ms(uint16_t time_ms){
@@ -98,34 +102,49 @@ void __attribute__((interrupt,no_auto_psv))_T2Interrupt(void){
 }
 
 void IOcheck(void) {
-    while(1){
-        unsigned int c=PORTAbits.RA2*100+PORTAbits.RA4*10+PORTBbits.RB4; //generate a case number
-        switch(c){
-            case 11: //only PB1 is pressed
-                LATBbits.LATB8 = 1;//LED on
-                Delay_ms(1000);//delay for 1 second
-                LATBbits.LATB8 = 0;//LED off
-                Delay_ms(1000);//delay for 1 second
-                break;
-            case 101: //only PB2 is pressed
-                LATBbits.LATB8 = 1;//LED on
-                Delay_ms(2000);//delay for 2 second
-                LATBbits.LATB8 = 0;//LED off
-                Delay_ms(2000);//delay for 2 second
-                break;
-            case 110: //only PB3 is pressed
-                LATBbits.LATB8 = 1;//LED on
-                Delay_ms(3000);//delay for 3 second
-                LATBbits.LATB8 = 0;//LED off//LED off
-                Delay_ms(3000);//delay for 3 second
-                break;
-            case 111: //no button is pressed
-                LATBbits.LATB8 = 0;//LED off
-                break;
-            default: //any other cases
-                LATBbits.LATB8 = 1;//LED on
-                break;
-        }
+    unsigned int c=PORTAbits.RA2*100+PORTAbits.RA4*10+PORTBbits.RB4; //generate a case number
+    switch(c){
+        case 11: //only PB1 is pressed
+            LATBbits.LATB8 = 1;//LED on
+            Disp2String("\rPB1 is pressed");
+            Delay_ms(573);//delay for 573 since it takes 427ms to send the above string
+            LATBbits.LATB8 = 0;//LED off
+            Delay_ms(1000);//delay for 1 second
+            break;
+        case 101: //only PB2 is pressed
+            LATBbits.LATB8 = 1;//LED on
+            Disp2String("\rPB2 is pressed");           
+            Delay_ms(1573);//delay for 1573 since it takes 427ms to send the above string
+            LATBbits.LATB8 = 0;//LED off
+            Delay_ms(2000);//delay for 2 second
+            break;
+        case 110: //only PB3 is pressed
+            LATBbits.LATB8 = 1;//LED on
+            Disp2String("\rPB3 is pressed");
+            Delay_ms(2573);//delay for 2573 since it takes 427ms to send the above string
+            LATBbits.LATB8 = 0;//LED off//LED off
+            Delay_ms(3000);//delay for 3 second
+            break;
+        case 111: //no button is pressed
+            Disp2String("\rNothing pressed");
+            LATBbits.LATB8 = 0;//LED off
+            break;
+        case 100: //PB2 AND PB3
+            Disp2String("\rPB2 AND PB3 are pressed");
+            LATBbits.LATB8 = 1;//LED on
+            break;
+        case 10: //no button is pressed
+            Disp2String("\rPB1 AND PB3 are pressed");
+            LATBbits.LATB8 = 1;//LED on
+            break;
+        case 1: //no button is pressed
+            Disp2String("\rPB1 AND PB2 are pressed");
+            LATBbits.LATB8 = 1;//LED on
+            break;            
+        default: //any other cases
+            Disp2String("\rAll PBs pressed");
+            LATBbits.LATB8 = 1;//LED on
+            break;
     }
     return;
 }
