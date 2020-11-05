@@ -133,8 +133,13 @@ void IOcheck(void) {
     switch(c){
         case 11: //only PB1 is pressed
             LATBbits.LATB8 = 1;//LED on
+<<<<<<< HEAD
             Disp2String("\rPB1 is pressed        ");//print the required string
 //            Delay_ms(333);//delay for 333 since it takes 667ms to send the above string
+=======
+            Disp2String("\rPB1 is pressed");//print the required string
+            Delay_ms(573);//delay for 573 since it takes 427ms to send the above string
+>>>>>>> 8394227a58fc1dab3b049650fc20cd1579eb1ece
             LATBbits.LATB8 = 0;//LED off
             Delay_ms(0.5);//delay for 500
             break;
