@@ -107,7 +107,7 @@ void IOcheck(void) {
         case 11: //only PB1 is pressed
             LATBbits.LATB8 = 1;//LED on
             Disp2String("\rPB1 is pressed");//print the required string
-            Delay_ms(1000);//delay for 573 since it takes 427ms to send the above string
+            Delay_ms(573);//delay for 573 since it takes 427ms to send the above string
             LATBbits.LATB8 = 0;//LED off
             Disp2String("\r                       ");//clear the terminate to prepare for update
             Delay_ms(333);//delay for 333 since it takes 667ms to send the above string
