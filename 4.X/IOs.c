@@ -23,6 +23,8 @@
 #define Idle() {__asm__ volatile ("pwrsav #1");}    //Idle() - put MCU in idle mode - only CPU off
 #define dsen() {__asm__ volatile ("BSET DSCON, #15");} //
 
+static unsigned int c=111;
+
 //clkval = 8 for 8MHz; 
 //clkval = 500 for 500kHz; 
 //clkval = 32 for 32kHz; 
@@ -63,10 +65,26 @@ void IOinit(void) {
     TRISAbits.TRISA2 = 1;//set RA2 to be input
     TRISBbits.TRISB4 = 1;//set RB4 to be input
     TRISAbits.TRISA4 = 1;//set RA4 to be input
+    
+    //Interrupt
+    CNEN1bits.CN0IE=1;
+    CNEN1bits.CN1IE=1;
+    CNEN2bits.CN30IE=1;
+    
     //Set pull up
     CNPU1bits.CN0PUE = 1;//RA4 pullup
     CNPU1bits.CN1PUE = 1;//RB4 pullup
     CNPU2bits.CN30PUE = 1;//RA2 pullup
+    
+    //Interrupt priority
+    IPC4bits.CNIP2=1;
+    IPC4bits.CNIP1=1;
+    IPC4bits.CNIP0=1;
+    
+    //Enable interrupt
+    IEC1bits.CNIE=1;
+    //Interrupt nesting enabled
+    INTCON1bits.NSTDIS=0;
     
     //32Khz clock
     NewClk(32);
@@ -101,57 +119,58 @@ void __attribute__((interrupt,no_auto_psv))_T2Interrupt(void){
     T2CONbits.TON=0;//stop the timer
 }
 
+//CNInterrupt interrupt sub routine
+void __attribute__((interrupt,no_auto_psv))_CNInterrupt(void){
+    if(IFS1bits.CNIF==1){
+        c=PORTAbits.RA2*100+PORTAbits.RA4*10+PORTBbits.RB4; //generate a case number
+    }
+    IFS1bits.CNIF=0;
+    Nop();
+}
+
 void IOcheck(void) {
-    unsigned int c=PORTAbits.RA2*100+PORTAbits.RA4*10+PORTBbits.RB4; //generate a case number
+    IFS1bits.CNIF=0;
     switch(c){
         case 11: //only PB1 is pressed
             LATBbits.LATB8 = 1;//LED on
-            Disp2String("\rPB1 is pressed");//print the required string
-            Delay_ms(1000);//delay for 573 since it takes 427ms to send the above string
+            Disp2String("\rPB1 is pressed        ");//print the required string
+//            Delay_ms(333);//delay for 333 since it takes 667ms to send the above string
             LATBbits.LATB8 = 0;//LED off
-            Disp2String("\r                       ");//clear the terminate to prepare for update
-            Delay_ms(333);//delay for 333 since it takes 667ms to send the above string
+            Delay_ms(0.5);//delay for 500
             break;
         case 101: //only PB2 is pressed
             LATBbits.LATB8 = 1;//LED on
-            Disp2String("\rPB2 is pressed");//print the required string           
-            Delay_ms(1573);//delay for 1573 since it takes 427ms to send the above string
-            LATBbits.LATB8 = 0;//LED off
-            Disp2String("\r                       ");//clear the terminate to prepare for update
+            Disp2String("\rPB2 is pressed        ");//print the required string
             Delay_ms(1333);//delay for 1333 since it takes 667ms to send the above string
+            LATBbits.LATB8 = 0;//LED off
+            Delay_ms(2000);//delay for 1333 since it takes 667ms to send the above string
             break;
         case 110: //only PB3 is pressed
             LATBbits.LATB8 = 1;//LED on
-            Disp2String("\rPB3 is pressed");//print the required string
-            Delay_ms(2573);//delay for 2573 since it takes 427ms to send the above string
+            Disp2String("\rPB3 is pressed        ");//print the required string
+            Delay_ms(2333);//delay for 333 since it takes 667ms to send the above string
             LATBbits.LATB8 = 0;//LED off//LED off
-            Disp2String("\r                       ");//clear the terminate to prepare for update
-            Delay_ms(2333);//delay for 2333 since it takes 667ms to send the above string
+            Delay_ms(3000);//delay for 2333 since it takes 667ms to send the above string
             break;
         case 111: //no button is pressed
-            Disp2String("\rNothing pressed");//print the required string
+            Disp2String("\rNothing pressed        ");//print the required string
             LATBbits.LATB8 = 0;//LED off
-            Disp2String("\r                       ");//clear the terminate to prepare for update
             break;
         case 100: //PB2 AND PB3
             Disp2String("\rPB2 AND PB3 are pressed");//print the required string
             LATBbits.LATB8 = 1;//LED on
-            Disp2String("\r                       ");//clear the terminate to prepare for update
             break;
-        case 10: //no button is pressed
+        case 10: //PB1 AND PB3
             Disp2String("\rPB1 AND PB3 are pressed");//print the required string
             LATBbits.LATB8 = 1;//LED on
-            Disp2String("\r                       ");//clear the terminate to prepare for update
             break;
-        case 1: //no button is pressed
+        case 1: //PB1 AND PB2
             Disp2String("\rPB1 AND PB2 are pressed");//print the required string
             LATBbits.LATB8 = 1;//LED on
-            Disp2String("\r                       ");//clear the terminate to prepare for update
             break;            
         default: //any other cases
-            Disp2String("\rAll PBs pressed");//print the required string
+            Disp2String("\rAll PBs pressed        ");//print the required string
             LATBbits.LATB8 = 1;//LED on
-            Disp2String("\r                       ");//clear the terminate to prepare for update
             break;
     }
     return;

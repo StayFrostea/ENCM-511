@@ -10,7 +10,9 @@
 
 void main(void) {
     IOinit();
-    IOcheck();
+    while(1){
+        IOcheck();
+    }
 }
 
 
