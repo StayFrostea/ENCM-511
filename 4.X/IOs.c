@@ -4,7 +4,7 @@
  *
  * Created on November 3, 2020, 2:03 AM
  */
-#include <p24fxxxx.h>
+//#include <p24fxxxx.h>
 #include <p24F16KA101.h>
 #include <stdio.h>
 #include <math.h>
@@ -24,6 +24,7 @@
 #define dsen() {__asm__ volatile ("BSET DSCON, #15");} //
 
 static unsigned int c=111;
+static int change = 0;
 
 //clkval = 8 for 8MHz; 
 //clkval = 500 for 500kHz; 
@@ -80,6 +81,11 @@ void IOinit(void) {
     IPC4bits.CNIP2=1;
     IPC4bits.CNIP1=1;
     IPC4bits.CNIP0=1;
+	
+	// High interrupt priority for the timer too
+//	IPC1bits.T2IP2=1;
+//	IPC1bits.T2IP1=1;
+//	IPC1bits.T2IP0=1;
     
     //Enable interrupt
     IEC1bits.CNIE=1;
@@ -123,6 +129,10 @@ void __attribute__((interrupt,no_auto_psv))_T2Interrupt(void){
 void __attribute__((interrupt,no_auto_psv))_CNInterrupt(void){
     if(IFS1bits.CNIF==1){
         c=PORTAbits.RA2*100+PORTAbits.RA4*10+PORTBbits.RB4; //generate a case number
+		change = 1;
+		IFS0bits.T2IF=0;//clear interrupt flag
+		T2CONbits.TON=0;//stop the timer
+		
     }
     IFS1bits.CNIF=0;
     Nop();
@@ -130,27 +140,31 @@ void __attribute__((interrupt,no_auto_psv))_CNInterrupt(void){
 
 void IOcheck(void) {
     IFS1bits.CNIF=0;
+	change = 0;
     switch(c){
         case 11: //only PB1 is pressed
             LATBbits.LATB8 = 1;//LED on
             Disp2String("\rPB1 is pressed        ");//print the required string
-//            Delay_ms(333);//delay for 333 since it takes 667ms to send the above string
+            Delay_ms(333);//delay for 333 since it takes 667ms to send the above string
             LATBbits.LATB8 = 0;//LED off
-            Delay_ms(0.5);//delay for 500
+            if (!change)
+				Delay_ms(500);//delay for 500
             break;
-        case 101: //only PB2 is pressed
-            LATBbits.LATB8 = 1;//LED on
+        case 101: //only PB2 is pressedin 
+           LATBbits.LATB8 = 1;//LED on
             Disp2String("\rPB2 is pressed        ");//print the required string
             Delay_ms(1333);//delay for 1333 since it takes 667ms to send the above string
             LATBbits.LATB8 = 0;//LED off
-            Delay_ms(2000);//delay for 1333 since it takes 667ms to send the above string
+			if (!change)
+				Delay_ms(2000);//delay for 1333 since it takes 667ms to send the above string
             break;
         case 110: //only PB3 is pressed
             LATBbits.LATB8 = 1;//LED on
             Disp2String("\rPB3 is pressed        ");//print the required string
             Delay_ms(2333);//delay for 333 since it takes 667ms to send the above string
             LATBbits.LATB8 = 0;//LED off//LED off
-            Delay_ms(3000);//delay for 2333 since it takes 667ms to send the above string
+            if (!change)
+				Delay_ms(3000);//delay for 2333 since it takes 667ms to send the above string
             break;
         case 111: //no button is pressed
             Disp2String("\rNothing pressed        ");//print the required string
