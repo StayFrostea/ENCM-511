@@ -7,3 +7,5 @@
 **/*.X/nbproject/Makefile-*
 **/*.X/nbproject/Package-*
 **/*.X/nbproject/private/
+/4.X/dist/
+/4.X/build/
