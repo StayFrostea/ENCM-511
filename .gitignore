@@ -1,5 +1,9 @@
 # Dumb macOS thing
 .DS_Store
 
-/P3.X/build/
-/P3.X/dist/
+# Ignoring files and directories according to http://microchip.wikidot.com/faq:72
+**/*.X/build/
+**/*.X/dist/
+**/*.X/nbproject/Makefile-*
+**/*.X/nbproject/Package-*
+**/*.X/nbproject/private/
