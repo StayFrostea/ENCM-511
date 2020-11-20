@@ -46,7 +46,7 @@ void IOcheck(void)
     IEC1bits.CNIE = 0; //disable CN interrupts to avoid debounces
     delay_ms(400,1);   // 400 msec delay to filter out debounces 
     IEC1bits.CNIE = 1; //Enable CN interrupts to detect pb release
-    while((PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1) && (PORTAbits.RA2 == 0)) //While only RA2 pb is pressed
+    while((PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1) && (PORTAbits.RA2 == 0)) //While only RA2 pb1 is pressed
     {
         pressTime=0; // reset pressTime
         resetFlag=0;
@@ -61,7 +61,7 @@ void IOcheck(void)
         delay_ms(800,1);   // 0.8 sec delay
     }
     
-    while((PORTBbits.RB4 == 1) && (PORTAbits.RA4 == 0) &&  (PORTAbits.RA2 == 1)) //While only RA4 pb is pressed
+    while((PORTBbits.RB4 == 1) && (PORTAbits.RA4 == 0) &&  (PORTAbits.RA2 == 1)) //While only RA4 pb2 is pressed
     {
         time+=1; // add 1 sec to timer
         pressTime=0; // reset pressTime
@@ -75,7 +75,7 @@ void IOcheck(void)
         NewClk(32); // slow down clock for delay and other tasks
         delay_ms(800,1);   // 0.8 sec delay
     }
-    while((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)) //While only RA2 pb is pressed
+    while((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)) //While only RB4 pb3 is pressed
     {
         delay_ms(100,1);   // 0.2 sec delay
         pressTime+=100; // update pressTime
@@ -95,6 +95,7 @@ void IOcheck(void)
         if(time>0){
             time-=1; // decrease timer
         }
+        //Need to place a statement to stop the timer is already on
         if(time==0){
             LATBbits.LATB8 = 1; // LED on
         } else {
