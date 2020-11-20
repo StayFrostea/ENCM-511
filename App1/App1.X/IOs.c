@@ -40,12 +40,15 @@ void IOinit(void)
 uint16_t time=0; //time displayed on the terminal
 uint16_t pressTime=0; //time RB4 is pressed in ms
 uint16_t resetFlag=1; //flag to avoid printing ALARM when timer is reset to 0
+uint16_t runFlag=0;
 
 void IOcheck(void)
 {
     IEC1bits.CNIE = 0; //disable CN interrupts to avoid debounces
     delay_ms(400,1);   // 400 msec delay to filter out debounces 
     IEC1bits.CNIE = 1; //Enable CN interrupts to detect pb release
+    
+    //PB1 Instructions
     while((PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1) && (PORTAbits.RA2 == 0)) //While only RA2 pb1 is pressed
     {
         pressTime=0; // reset pressTime
@@ -61,6 +64,7 @@ void IOcheck(void)
         delay_ms(800,1);   // 0.8 sec delay
     }
     
+    //PB2 Instructions
     while((PORTBbits.RB4 == 1) && (PORTAbits.RA4 == 0) &&  (PORTAbits.RA2 == 1)) //While only RA4 pb2 is pressed
     {
         time+=1; // add 1 sec to timer
@@ -75,6 +79,15 @@ void IOcheck(void)
         NewClk(32); // slow down clock for delay and other tasks
         delay_ms(800,1);   // 0.8 sec delay
     }
+    
+    //PB3 Instructions
+    if((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)){
+        if(runFlag==0){
+            runFlag=1;
+        }
+        else
+            runFlag=0;
+    }
     while((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)) //While only RB4 pb3 is pressed
     {
         delay_ms(100,1);   // 0.2 sec delay
@@ -87,13 +100,14 @@ void IOcheck(void)
         time=0; //reset timer
         pressTime=0;
         resetFlag=1;
-    } else if(pressTime>0) // 0<pressTime<3000
+    } 
+    else if(pressTime>0) // 0<pressTime<3000
     {
         pressTime=1; // set pressTime to 1 so multiple short press wont increase the pressTime
         resetFlag=0;
         delay_ms(1000,1);   // 1 sec delay
-        if(time>0){
-            time-=1; // decrease timer
+        if(time>0 && runFlag==1){
+            time -= 1; // decrease timer
         }
         //Need to place a statement to stop the timer is already on
         if(time==0){
@@ -102,6 +116,8 @@ void IOcheck(void)
             LATBbits.LATB8 = LATBbits.LATB8 ^ 1; //blink the LED
         }
     }
+    
+    //General running instructions
     if((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1))//No button is pressed
     {
         NewClk(8);
