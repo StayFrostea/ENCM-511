@@ -53,9 +53,9 @@ void IOcheck(void)
         time+=60; // add 1 min to timer
         NewClk(8); // speed up clock just for display
         Disp2String("\r"); // print time to terminal
-        Disp2Dec(time/60);
+        Disp2Dec(time/60*1000);
         Disp2String("m : ");
-        Disp2Dec(time%60);
+        Disp2Dec(time%60*1000);
         Disp2String("s         ");
         NewClk(32); // slow down clock for delay and other tasks
         delay_ms(800,1);   // 0.8 sec delay
@@ -68,9 +68,9 @@ void IOcheck(void)
         resetFlag=0;
         NewClk(8);
         Disp2String("\r"); // print time to terminal
-        Disp2Dec(time/60);
+        Disp2Dec(time/60*1000);
         Disp2String("m : ");
-        Disp2Dec(time%60);
+        Disp2Dec(time%60*1000);
         Disp2String("s         ");        
         NewClk(32); // slow down clock for delay and other tasks
         delay_ms(800,1);   // 0.8 sec delay
@@ -105,9 +105,9 @@ void IOcheck(void)
     {
         NewClk(8);
         Disp2String("\r"); // print time to terminal
-        Disp2Dec(time/60);
+        Disp2Dec(time/60*1000);
         Disp2String("m : ");
-        Disp2Dec(time%60);
+        Disp2Dec(time%60*1000);
         if(time==0&&resetFlag==0){
             Disp2String("s -- ALARM"); 
         } else {
