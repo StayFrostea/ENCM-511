@@ -43,7 +43,7 @@ void main(void) {
      REFOCONbits.RODIV = 0b0000;
      
     // Change Clock
-     NewClk(32); // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
+    NewClk(32); // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
      
    // Initialize IOs for low-power wake-up
     AD1PCFG = 0xFFFF; // Turn all analog pins as digital
@@ -51,7 +51,7 @@ void main(void) {
     
 
     while(1){
-        Idle();
+        IOmain();
     }             
     
     

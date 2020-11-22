@@ -298,16 +298,18 @@ void IOinit(void)
     IFS1bits.CNIF = 0; // Clear interrupt flag
     IEC1bits.CNIE = 1; //Enable CN interrupts
     
+    NewClk(32);
     return;
 }
 
 uint16_t time=0; //time displayed on the terminal
 uint16_t pressTime=0; //time RB4 is pressed in ms
 uint16_t resetFlag=1; //flag to avoid printing ALARM when timer is reset to 0
-uint16_t runFlag=0;
+uint16_t runFlag=0; //flag to indicate that the timer is running
 
 void IOcheck(void)
 {
+    NewClk(32);
     IEC1bits.CNIE = 0; //disable CN interrupts to avoid debounces
     delay_ms(400,1);   // 400 msec delay to filter out debounces 
     IEC1bits.CNIE = 1; //Enable CN interrupts to detect pb release
@@ -345,59 +347,51 @@ void IOcheck(void)
     }
     
     //PB3 Instructions
-    if((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)){
-        if(runFlag==0){
-            runFlag=1;
-        }
-        else
-            runFlag=0;
-    }
     while((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 0)) //While only RB4 pb3 is pressed
     {
         delay_ms(100,1);   // 0.2 sec delay
         pressTime+=100; // update pressTime
     }
-    
+    return;
+}
+
+void IOmain(){
     //depends on value of pressTime do the following
     if(pressTime>3000) //pressTime > 3000
     {
         time=0; //reset timer
-        pressTime=0;
+        pressTime=0; //reset pressTime
         resetFlag=1;
+        runFlag=0;
     } 
     else if(pressTime>0) // 0<pressTime<3000
     {
-        pressTime=1; // set pressTime to 1 so multiple short press wont increase the pressTime
+        pressTime=0; // set pressTime to 0 so multiple short press wont increase the pressTime
         resetFlag=0;
+        runFlag=runFlag^1; //Change run flag
+    }
+    if(time>0 && runFlag==1){
+        time -= 1; // decrease timer
         delay_ms(1000,1);   // 1 sec delay
-        if(time>0 && runFlag==1){
-            time -= 1; // decrease timer
-        }
-        //Need to place a statement to stop the timer is already on
+    }
+    if(runFlag==1){ //control the LED
         if(time==0){
             LATBbits.LATB8 = 1; // LED on
         } else {
             LATBbits.LATB8 = LATBbits.LATB8 ^ 1; //blink the LED
         }
     }
-    
-    //General running instructions
-    if((PORTAbits.RA2 == 1) && (PORTAbits.RA4 == 1) && (PORTBbits.RB4 == 1))//No button is pressed
-    {
-        NewClk(8);
-        Disp2String("\r"); // print time to terminal
-        Disp2Dec(time/60*1000);
-        Disp2String("m : ");
-        Disp2Dec(time%60*1000);
-        if(time==0&&resetFlag==0){
-            Disp2String("s -- ALARM"); 
-        } else {
-            Disp2String("s         ");           
-        }
-        NewClk(32); // slow down clock for delay and other tasks
+    NewClk(8);
+    Disp2String("\r"); // print time to terminal
+    Disp2Dec(time/60*1000);
+    Disp2String("m : ");
+    Disp2Dec(time%60*1000);
+    if(time==0&&resetFlag==0){
+        Disp2String("s -- ALARM");
+    } else {
+        Disp2String("s         ");
     }
-    return;
-
+    NewClk(32); // slow down clock for delay and other tasks    
 }
 
 ///// Change of pin Interrupt subroutine
