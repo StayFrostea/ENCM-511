@@ -49,10 +49,11 @@ void main(void) {
     AD1PCFG = 0xFFFF; // Turn all analog pins as digital
     IOinit();  // enables IO and CN interrupts on Push buttons
     
-    while(1)
-    {
-        IOcheck();              
-    }
+
+    while(1){
+        Idle();
+    }             
+    
     
     return;
 }
