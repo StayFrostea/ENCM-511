@@ -22,7 +22,7 @@ uint16_t numLines;
 AD1CON1bits.ADON = 1; // turn on ADC module
 AD1CON1bits.FORM = 00; //This will set up integer
 AD1CON1bits.SSRC = 111; //Use internal counter for start/stop
-AD1CONbits.ASAM = 0;
+AD1CON1bits.ASAM = 0;
 
 AD1CON2bits.VCFG = 0;//System Clock
 AD1CON2bits.CSCNA = 000;//Do not scan results
