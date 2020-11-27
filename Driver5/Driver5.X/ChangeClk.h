@@ -1,15 +1,25 @@
 /* 
- * File: ChangeClk.h
- * Author: Jeff, Long
+ * File:   ChangeClk.h
+ * Author: rvyas
+ *
+ * Created on November 19, 2016, 8:05 PM
  */
 
-// This is a guard condition so that contents of this file are not included
-// more than once.  
-#ifndef CHANGE_CLK
-#define	CHANGE_CLK
+#ifndef CHANGECLK_H
+#define	CHANGECLK_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
+#ifdef	__cplusplus
+extern "C" {
+#endif
 
-void NewClk(unsigned int clkval);
 
-#endif	/* CHANGE_CLK */
+
+
+#ifdef	__cplusplus
+}
+#endif
+
+
+void NewClk(unsigned int);
+
+#endif	/* CHANGECLK_H */
