@@ -24,12 +24,12 @@ void main(void) {
     // Change Clock
     NewClk(500); // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
     
-    uint16_t res;//For stroing the result of the conversion
+    uint16_t rV;//For string the result of the conversion
     
     InitUART2();
 
     while(1){
-        res = do_ADC();
+        rV = do_ADC();
     }             
     
     return;
