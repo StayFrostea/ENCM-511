@@ -1,9 +1,12 @@
+/* 
+ * File:   ChangeClk.c
+ * Author: longt
+ *
+ * Created on November 19, 2020, 6:25 PM
+ */
 #include "xc.h"
 #include "ChangeClk.h"
 
-//clkval = 8 for 8MHz; 
-//clkval = 500 for 500kHz; 
-//clkval = 32 for 32kHz; 
 void NewClk(unsigned int clkval)  
 {
     char COSCNOSC;
@@ -26,11 +29,13 @@ void NewClk(unsigned int clkval)
         // Switch clock to 500 kHz
      SRbits.IPL = 7;  //Disable interrupts
      CLKDIVbits.RCDIV = 0;  // CLK division = 0
-     __builtin_write_OSCCONH(COSCNOSC); // (0x00) for 8MHz; (0x66) for 500kHz; (0x55) for 32kHz;
+     __builtin_write_OSCCONH(COSCNOSC);   // (0x00) for 8MHz; (0x66) for 500kHz; (0x55) for 32kHz;
      __builtin_write_OSCCONL(0x01);
      OSCCONbits.OSWEN=1;
      while(OSCCONbits.OSWEN==1)
      {} 
      SRbits.IPL = 0;  //enable interrupts
 }
+
+
 
