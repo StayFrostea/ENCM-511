@@ -3,12 +3,12 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>Driver5</name>
-            <creation-uuid>f50ee87a-af29-4de7-8b06-294b8637fc66</creation-uuid>
+            <name>5</name>
+            <creation-uuid>04e6d77f-bc98-4808-9bd3-c2a5f4db4a01</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
-            <header-extensions/>
+            <header-extensions>h</header-extensions>
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
