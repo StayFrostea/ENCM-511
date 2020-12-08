@@ -13,27 +13,27 @@
 void IOinit(void)
 /* Initialize IO and interrupts */
 {
-	TRISBbits.TRISB8  = 0;  // Make GPIO RB8 as a digital output
-	LATBbits.LATB8    = 0;  // Make GPIO RB8 as a digital output
+	TRISBbits.TRISB8  = 0;  // Set GPIO RB8 as a digital output (LED)
+	LED               = 0;  // Turn the LED off
 
-	TRISAbits.TRISA4  = 1;  // Makes GPIO RA4 as a digital input
-	CNPU1bits.CN0PUE  = 1;  // Enables pull up resistor on RA4/CN0
+	TRISAbits.TRISA2  = 1;  // Set GPIO RA2 as a digital input (PB1)
+	CNPU2bits.CN30PUE = 1;  // Enable pull up resistor on RA2/CN30
+	CNEN2bits.CN30IE  = 1;  // Enable CN on CN30
+
+	TRISAbits.TRISA4  = 1;  // Set GPIO RA4 as a digital input (PB2)
+	CNPU1bits.CN0PUE  = 1;  // Enable pull up resistor on RA4/CN0
 	CNEN1bits.CN0IE   = 1;  // Enable CN on CN0
 
-	TRISBbits.TRISB4  = 1;  // Makes GPIO RB4 as a digital input
-	CNPU1bits.CN1PUE  = 1;  // Enables pull up resistor on RA4/CN0
+	TRISBbits.TRISB4  = 1;  // Set GPIO RB4 as a digital input (PB3)
+	CNPU1bits.CN1PUE  = 1;  // Enable pull up resistor on RB4/CN1
 	CNEN1bits.CN1IE   = 1;  // Enable CN on CN1
-
-	TRISAbits.TRISA2  = 1;  // Makes GPIO RA2 as a digital input
-	CNPU2bits.CN30PUE = 1;  // Enables pull up resistor on RA4/CN0
-	CNEN2bits.CN30IE  = 1;  // Enable CN on CN30
 
 	// CN Interrupt settings
 	IPC4bits.CNIP = 6;      // 7 is highest priority, 1 is lowest, 0 is disabled
 	IFS1bits.CNIF = 0;      // Clear interrupt flag
 	IEC1bits.CNIE = 1;      // Enable CN interrupts
 
-	NewClk(32);
+	NewClk(32);             // Set clock to 32kHz
 	return;
 }
 
@@ -53,9 +53,7 @@ void IOcheck(void)
 	IEC1bits.CNIE = 1;  // Enable CN interrupts to detect PB release
 
 	// PB1 Instructions:
-	while ( (PORTAbits.RA4 == 1) &&  // While only RA2/PB1 is pressed
-			(PORTBbits.RB4 == 1) &&
-			(PORTAbits.RA2 == 0) ) {
+	while (PB1 && !PB2 && !PB3) {  // While only PB1 is pressed
 		pressTime = 0;      // Reset pressTime
 		resetFlag = 0;
 		time += 60;         // Add 1 min to timer
@@ -70,9 +68,7 @@ void IOcheck(void)
 	}
 
 	// PB2 Instructions:
-	while ( (PORTBbits.RB4 == 1) &&  // While only RA4/PB2 is pressed
-			(PORTAbits.RA4 == 0) &&
-			(PORTAbits.RA2 == 1) ) {
+	while (!PB1 && PB2 && !PB3) {  // While only PB2 is pressed
 		time += 1;          // Add 1 sec to timer
 		pressTime = 0;      // Reset pressTime
 		resetFlag = 0;
@@ -87,9 +83,7 @@ void IOcheck(void)
 	}
 
 	// PB3 Instructions:
-	while ( (PORTAbits.RA2 == 1) &&  // While only RB4/PB3 is pressed
-			(PORTAbits.RA4 == 1) &&
-			(PORTBbits.RB4 == 0) ) {
+	while (!PB1 && !PB2 && PB3) {  // While only PB3 is pressed
 		delay_ms(100, 1);  // 0.2 sec delay
 		pressTime += 100;  // Update pressTime
 	}
@@ -118,14 +112,13 @@ void IOmain()
 		delay_ms(1000, 1);  // 1 sec delay
 	}
 
-	if (runFlag == 1) {          // Control the LED
-		if (time == 0) {
-			LATBbits.LATB8 = 1;  // LED on
-		} else {
-			LATBbits.LATB8 = !LATBbits.LATB8;  // Blink the LED
-		}
+	if (runFlag == 1) {     // Control the LED
+		if (time == 0)
+			LED = 1;        // LED on
+		else
+			LED = !LED;     // Toggle the LED
 	} else {
-		LATBbits.LATB8 = 0;      // LED off
+		LED = 0;            // LED off
 	}
 
 	NewClk(8);
