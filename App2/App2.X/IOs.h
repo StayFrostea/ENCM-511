@@ -1,5 +1,5 @@
 #ifndef IO_H
-#define	IO_H
+#define IO_H
 
 #include <xc.h> 
 
@@ -9,4 +9,4 @@ void IOinit(void);
 void IOcheck(void);
 void IOmain(void);
 
-#endif	/* IO_H */
+#endif /* IO_H */
