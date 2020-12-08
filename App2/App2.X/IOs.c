@@ -41,7 +41,7 @@ void IOinit(void)
 uint16_t time = 0;       // Time displayed on the terminal
 uint16_t pressTime = 0;  // Time RB4 is pressed in ms
 uint16_t resetFlag = 1;  // Flag to avoid printing ALARM when the
-                         //   timer is reset to 0
+                         //     timer is reset to 0.
 uint16_t runFlag = 0;    // Flag to indicate that the timer is running
 
 void IOcheck(void)
@@ -101,7 +101,7 @@ void IOmain()
 		runFlag = 0;
 	} else if (pressTime > 0) {  // 0<pressTime<3000
 		// Set pressTime to 0 so multiple short presses
-		//   won't increase the pressTime
+		//     won't increase the pressTime.
 		pressTime = 0;
 		resetFlag = 0;
 		runFlag = !runFlag;      // Flip the run flag
@@ -122,7 +122,7 @@ void IOmain()
 	}
 
 	NewClk(8);
-	Disp2String("\r");           // Print time to terminal
+	Disp2String("\r");      // Print time to terminal
 	Disp2Dec(time / 60 * 1000);
 	Disp2String("m : ");
 	Disp2Dec(time % 60 * 1000);

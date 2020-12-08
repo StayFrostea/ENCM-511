@@ -57,7 +57,7 @@ void InitUART2(void)
 	/*
 	U2STAbits.UTXISEL1 = 1;  // Bit15 Int when Char is transferred (1/2 config!)
 	U2STAbits.UTXISEL0 = 1;  // Generate interrupt with last character
-	                         //	  shifted out of U2TXREG buffer
+	                         //	    shifted out of U2TXREG buffer.
 	U2STAbits.UTXINV   = 0;  // Bit14 N/A, IRDA config
 	U2STAbits.UTXBRK   = 0;  // Bit11 Disabled
 	U2STAbits.UTXEN    = 0;  // Bit10 TX pins controlled by periph
@@ -73,7 +73,7 @@ void InitUART2(void)
 	*/
 	IFS1bits.U2TXIF = 0;     // Clear the Transmit Interrupt Flag
 	IPC7bits.U2TXIP = 3;     // UART2 TX interrupt has interrupt priority
-	                         //   3-4th highest priority
+	                         //     3-4th highest priority.
 
 	IEC1bits.U2TXIE = 1;     // Enable Transmit Interrupts
 	IFS1bits.U2RXIF = 0;     // Clear the Recieve Interrupt Flag

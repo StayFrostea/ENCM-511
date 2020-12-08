@@ -5,7 +5,7 @@
 
 // Pin definitions for the pushbuttons (read-only).
 // Here they are logically negated because the buttons are normally open
-//   and the pins are pulled up internally, and so are active-low.
+//     and the pins are pulled up internally, and so are active-low.
 #define PB1 (!PORTAbits.RA2)
 #define PB2 (!PORTAbits.RA4)
 #define PB3 (!PORTBbits.RB4)
