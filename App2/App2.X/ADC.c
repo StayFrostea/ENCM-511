@@ -29,7 +29,6 @@ void initADC(void)
 
 	AD1CHSbits.CH0NA = 0;        // Channel 0 negative input is Vr- for MuxA
 	AD1CHSbits.CH0SA = 0b0101;   // Channel 0 positive input is AN5
-	AD1CHSbits.CH0NB = 0;        // Channel 0 negative input is Vr- for MuxB
 
 	AD1PCFG = 0xFFFF;            // Set all bits as digital
 	AD1PCFGbits.PCFG5 = 0;       // Set pin8/AN5/RA3 as Analog input for ADC
