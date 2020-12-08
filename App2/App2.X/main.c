@@ -16,7 +16,10 @@
 #include "IOs.h"
 #include "UART2.h"
 
-#pragma config FCKSM = CSECMD // Clock switching is enabled, clock monitor disabled
+// Clock switching is enabled, clock monitor disabled
+#pragma config FCKSM = CSECMD
+// CLKO output disabled on pin 8, use as IO.
+#pragma config OSCIOFNC = ON
 
 // Global variables
 uint8_t CNflag = 0;
