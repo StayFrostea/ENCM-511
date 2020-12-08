@@ -23,5 +23,13 @@
                 <project-formatting-style>false</project-formatting-style>
             </formatting>
         </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>Autobaud</word>
+            <word>Disp</word>
+            <word>Int</word>
+            <word>realterm</word>
+            <word>serialplot</word>
+            <word>Xmit</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>

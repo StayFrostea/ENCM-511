@@ -15,7 +15,7 @@ void initADC(void)
 
 	AD1CON2bits.VCFG  = 0b000;   // Selects AVdd, AVss (supply voltage to PIC) as Vref
 	AD1CON2bits.CSCNA = 0;       // Configure ADC by setting bits in AD1CON2 as shown in slides 15-16
-	// TODO: Add another input
+	// TODO: Add another input.
 	// Interrupt at the completion of conversion for each sample/convert sequence
 	AD1CON2bits.SMPI = 0b0000;
 	AD1CON2bits.BUFM = 0;        // Buffer configured as one 16-word buffer

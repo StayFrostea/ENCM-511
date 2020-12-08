@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   ChangeClk.h
  * Author: rvyas
  *

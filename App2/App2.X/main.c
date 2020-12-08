@@ -17,13 +17,10 @@
 // Clock control
 #pragma config IESO     = OFF     // 2 Speed Startup disabled
 #pragma config FNOSC    = FRC     // Start up CLK = 8 MHz
-#pragma config FCKSM    = CSECMD  // Clock switching is enabled,
-                                  //     clock monitor disabled.
-#pragma config SOSCSEL  = SOSCLP  // Secondary oscillator for
-                                  //     Low Power Operation.
-#pragma config POSCFREQ = MS      // Primary Oscillator/External clock
-                                  //     frequency between 100kHz and 8 MHz.
-                                  //     Options: LS, MS, HS.
+#pragma config FCKSM    = CSECMD  // Clock switching is enabled, clock monitor disabled.
+#pragma config SOSCSEL  = SOSCLP  // Secondary oscillator for Low Power Operation.
+#pragma config POSCFREQ = MS      /* Primary Oscillator/External clock frequency between
+                                     100kHz and 8 MHz. Options: LS, MS, HS. */
 #pragma config OSCIOFNC = ON      // CLKO output disabled on pin 8, use as IO.
 #pragma config POSCMOD  = NONE    // Primary oscillator mode is disabled
 
@@ -74,4 +71,4 @@ int main(void) {
 
 	return 0;
 }
-*/
+ */

@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   UART2.h
  * Author: rvyas
  *
@@ -6,7 +6,7 @@
  */
 
 #ifndef UART2_H
-#define	UART2_H
+#define UART2_H
 
 void InitUART2(void);
 void XmitUART2(char, unsigned int);

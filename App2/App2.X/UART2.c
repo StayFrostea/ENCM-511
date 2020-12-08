@@ -13,33 +13,34 @@
 
 unsigned int clkval;
 
+
 void InitUART2(void)
 /* Initialization of UART 2 module */
 {
-	// Configure UART2 module on pins RB0 (Tx) and RB1 (Rx) on PIC24F16KA101
-	// Enable UART2
-	// Set to Baud 4800 with 500kHz clk on PIC24F
+	// Configure UART2 module on pins RB0 (Tx) and RB1 (Rx) on PIC24F16KA101.
+	// Enable UART2.
+	// Set to Baud 4800 with 500kHz clock on PIC24F.
 
 	TRISBbits.TRISB0 = 0;
 	TRISBbits.TRISB1 = 1;
-	LATBbits.LATB0 = 1;
+	LATBbits.LATB0   = 1;
 
 	// Configure U2MODE
 	U2MODE = 0b0000000000001000;
-	/*    
-	U2MODEbits.UARTEN = 0;	// Bit15 TX, RX DISABLED, ENABLE at end of func
-	U2MODEbits.USIDL = 0;	// Bit13 Continue in Idle
-	U2MODEbits.IREN = 0;	// Bit12 No IR translation
-	U2MODEbits.RTSMD = 0;	// Bit11 Simplex Mode
-	U2MODEbits.UEN = 0;		// Bits8,9 TX,RX enabled, CTS,RTS not
-	U2MODEbits.WAKE = 0;	// Bit7 No Wake up (since we don't sleep here)
-	U2MODEbits.LPBACK = 0;	// Bit6 No Loop Back
-	U2MODEbits.ABAUD = 0;	// Bit5 No Autobaud (would require sending '55')
-	U2MODEbits.RXINV = 0;	// Bit4 IdleState = 1
-	U2MODEbits.BRGH = 1;	// Bit3 16 clocks per bit period
-	U2MODEbits.PDSEL = 0;	// Bits1,2 8bit, No Parity
-	U2MODEbits.STSEL = 0;	// Bit0 One Stop Bit
-	*/
+	/*
+	U2MODEbits.UARTEN = 0;  // Bit15 Tx, Rx DISABLED, ENABLE at end of func
+	U2MODEbits.USIDL  = 0;  // Bit13 Continue in Idle
+	U2MODEbits.IREN   = 0;  // Bit12 No IR translation
+	U2MODEbits.RTSMD  = 0;  // Bit11 Simplex Mode
+	U2MODEbits.UEN    = 0;  // Bits8,9 Tx, Rx enabled; CTS, RTS not
+	U2MODEbits.WAKE   = 0;  // Bit7 No Wake up (since we don't sleep here)
+	U2MODEbits.LPBACK = 0;  // Bit6 No Loop Back
+	U2MODEbits.ABAUD  = 0;  // Bit5 No Autobaud (would require sending '55')
+	U2MODEbits.RXINV  = 0;  // Bit4 IdleState = 1
+	U2MODEbits.BRGH   = 1;  // Bit3 16 clocks per bit period
+	U2MODEbits.PDSEL  = 0;  // Bits1,2 8bit, No Parity
+	U2MODEbits.STSEL  = 0;  // Bit0 One Stop Bit
+	 */
 	if (OSCCONbits.COSC == 0b110) {
 		// Gives a baud rate of 4807.7 Baud with 500kHz clock
 		// Set Baud to 4800 on realterm
@@ -50,35 +51,33 @@ void InitUART2(void)
 		U2BRG = 12;
 	} else if (OSCCONbits.COSC == 0b000) {
 		U2BRG = 103;  // Gives a baud rate of 9600 with 8MHz clock
-		// Set Baud to 9600 on real term
+		// Set Baud to 9600 on realterm
 	}
 	// Load all values in for U1STA SFR
 	U2STA = 0b1010000000000000;
 	/*
 	U2STAbits.UTXISEL1 = 1;  // Bit15 Int when Char is transferred (1/2 config!)
-	U2STAbits.UTXISEL0 = 1;  // Generate interrupt with last character
-	                         //	    shifted out of U2TXREG buffer.
+	U2STAbits.UTXISEL0 = 1;  // Generate interrupt with last character shifted out of U2TXREG buffer.
 	U2STAbits.UTXINV   = 0;  // Bit14 N/A, IRDA config
 	U2STAbits.UTXBRK   = 0;  // Bit11 Disabled
-	U2STAbits.UTXEN    = 0;  // Bit10 TX pins controlled by periph
+	U2STAbits.UTXEN    = 0;  // Bit10 Tx pins controlled by periph
 	U2STAbits.UTXBF    = 0;  // Bit9 *Read Only Bit*
 	U2STAbits.TRMT     = 0;  // Bit8 *Read Only bit*
-	U2STAbits.URXISEL  = 0;  // Bits6,7 Int. on character recieved
+	U2STAbits.URXISEL  = 0;  // Bits6,7 Int. on character received
 	U2STAbits.ADDEN    = 0;  // Bit5 Address Detect Disabled
 	U2STAbits.RIDLE    = 0;  // Bit4 *Read Only Bit*
 	U2STAbits.PERR     = 0;  // Bit3 *Read Only Bit*
 	U2STAbits.FERR     = 0;  // Bit2 *Read Only Bit*
 	U2STAbits.OERR     = 0;  // Bit1 *Read Only Bit*
 	U2STAbits.URXDA    = 0;  // Bit0 *Read Only Bit*
-	*/
+	 */
 	IFS1bits.U2TXIF = 0;     // Clear the Transmit Interrupt Flag
-	IPC7bits.U2TXIP = 3;     // UART2 TX interrupt has interrupt priority
-	                         //     3-4th highest priority.
+	IPC7bits.U2TXIP = 3;     // UART2 Tx interrupt has interrupt priority 3-4th highest priority.
 
 	IEC1bits.U2TXIE = 1;     // Enable Transmit Interrupts
-	IFS1bits.U2RXIF = 0;     // Clear the Recieve Interrupt Flag
+	IFS1bits.U2RXIF = 0;     // Clear the Receive Interrupt Flag
 	IPC7bits.U2RXIP = 4;     // UART2 Rx interrupt has 2nd highest priority
-	IEC1bits.U2RXIE = 0;     // Disable Recieve Interrupts
+	IEC1bits.U2RXIE = 0;     // Disable Receive Interrupts
 
 	U2MODEbits.UARTEN = 1;   // And turn the peripheral on
 
@@ -90,7 +89,7 @@ void InitUART2(void)
 void XmitUART2(char CharNum, unsigned int repeatNo)
 /* Xmit UART2:
  * Displays 'DispData' on realterm 'repeatNo' of times using UART to PC.
- * Adjust Baud on real term as per clock:
+ * Adjust Baud on realterm as per clock:
  * 32kHz clock - Baud=300
  * 500kHz clock - Baud=4800
  */

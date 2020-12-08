@@ -1,7 +1,7 @@
 #ifndef ADC_H
 #define ADC_H
 
-#include <xc.h>  
+#include <xc.h>
 
 void initADC(void);
 uint16_t readADC(void);

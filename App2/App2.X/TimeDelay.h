@@ -1,5 +1,5 @@
 #ifndef TIME_DELAY_H
-#define	TIME_DELAY_H
+#define TIME_DELAY_H
 
 #include <xc.h>
 
