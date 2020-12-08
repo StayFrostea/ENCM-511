@@ -6,9 +6,9 @@
             <name>App2</name>
             <creation-uuid>489d40d9-431b-49ec-aaa4-6321b8ba8a9a</creation-uuid>
             <make-project-type>0</make-project-type>
-            <c-extensions/>
+            <c-extensions>c</c-extensions>
             <cpp-extensions/>
-            <header-extensions/>
+            <header-extensions>h</header-extensions>
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
