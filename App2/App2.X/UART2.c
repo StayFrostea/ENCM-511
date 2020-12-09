@@ -110,6 +110,11 @@ void XmitUART2(char CharNum, unsigned int repeatNo)
 //		Idle();
 	}
 
+	/* TODO: Block until the byte is in the buffer, as above.
+	 *       Then, return from this function and turn off the UART module
+	 *       in the Tx ISR if the buffer is empty.
+	 */
+
 	U2MODEbits.UARTEN = 0;
 	LATBbits.LATB9 = 1;
 	return;

@@ -41,6 +41,12 @@ void initADC(void)
 	IFS0bits.AD1IF = 0;          // Clear interrupt flag
 //	IEC0bits.AD1IE = 1;          // Enable ADC interrupts
 	// TODO: Figure out where to enable ADC interrupts
+
+	/* TODO: The ADC conversion interrupt will trigger a timer capture.
+	 *       Then, all the information will be present in a windowed buffer
+	 *       and the main program can perform calculations on it
+	 *       in the meantime.
+	 */
 }
 
 

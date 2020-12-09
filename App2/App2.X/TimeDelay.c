@@ -39,5 +39,7 @@ void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void)
 {
 	IFS0bits.T2IF = 0;  // Clear timer 2 interrupt flag
 //	TMR2flag = 1;       // Optional global variable created by user
+
+	// TODO: Accept a callback function.
 	return;
 }

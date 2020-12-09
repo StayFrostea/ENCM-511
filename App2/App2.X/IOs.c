@@ -139,11 +139,16 @@ void IOmain()
 void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void)
 /* Change Notification interrupt subroutine */
 {
-	CNflag = 1;         // Global user defined flag - use only if needed
 	IFS1bits.CNIF = 0;  // Clear IF flag
 	T2CONbits.TON = 0;  // Disable timer
 	IEC0bits.T2IE = 0;  // Disable timer interrupt
-	IOcheck();
-	Nop();
+
+	IEC1bits.CNIE = 0;  // Disable CN interrupts
+
+	/* TODO: Start a 400ms timer and return from this ISR.
+	 *       When the timer goes off, its ISR will record the state of
+	 *       the buttons and switch the state variable accordingly.
+	 */
+
 	return;
 }

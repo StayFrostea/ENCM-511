@@ -57,6 +57,13 @@ int main(void)
 		IOmain();
 	}
 	return 0;
+
+	/* TODO: Each iteration, switch about the state variable to determine
+	 *       which function to call.
+	 *       Within each state, use the ADC to sample.
+	 *       ADC interrupt should have higher priority than
+	 *       CN interrupt, which is higher than timers.
+	 */
 }
 
 /*
