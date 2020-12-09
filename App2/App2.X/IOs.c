@@ -63,8 +63,8 @@ void IOcheck(void)
 		Disp2String("m : ");
 		Disp2Dec(time % 60 * 1000);
 		Disp2String("s         ");
-		NewClk(32);        // Slow down clock for delay and other tasks
-		delay_ms(800, 1);  // 0.8 sec delay
+		NewClk(32);         // Slow down clock for delay and other tasks
+		delay_ms(800, 1);   // 0.8 sec delay
 	}
 
 	// PB2 Instructions:
