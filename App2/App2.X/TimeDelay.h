@@ -3,9 +3,11 @@
 
 #include <xc.h>
 
-extern unsigned int TMR2flag;
+typedef void (*DelayCallbackPtr)();
 
-void delay_ms(uint16_t, uint8_t);
+void delay_ms(uint16_t time_ms, uint8_t idle_on);
+void delay_ms_callback(uint16_t time_ms, DelayCallbackPtr cb);
+
 void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void);
 
 #endif /* TIME_DELAY_H */
