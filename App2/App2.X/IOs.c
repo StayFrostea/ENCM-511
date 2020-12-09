@@ -8,10 +8,11 @@
 #include "TimeDelay.h"
 #include "IOs.h"
 #include "UART2.h"
+#include "meter.h"
 
 
-void IOinit(void)
-/* Initialize IO and interrupts */
+void initIO(void)
+/* Initialize GPIO and CN interrupts */
 {
 	TRISBbits.TRISB8  = 0;  // Set GPIO RB8 as a digital output (LED)
 	LED               = 0;  // Turn the LED off
@@ -32,9 +33,6 @@ void IOinit(void)
 	IPC4bits.CNIP = 6;      // 7 is highest priority, 1 is lowest, 0 is disabled
 	IFS1bits.CNIF = 0;      // Clear interrupt flag
 	IEC1bits.CNIE = 1;      // Enable CN interrupts
-
-	NewClk(32);             // Set clock to 32kHz
-	return;
 }
 
 
@@ -133,6 +131,17 @@ void IOmain()
 	}
 
 	NewClk(32);  // Slow down clock for delay and other tasks
+}
+
+
+void initRefOsc(void)
+{
+	// Clock output on REFO/RB15
+	TRISBbits.TRISB15  = 0;       // Set RB15 as output for REFO
+	REFOCONbits.ROEN   = 1;       // Ref oscillator is enabled
+	REFOCONbits.ROSSLP = 0;       // Ref oscillator is disabled in sleep
+	REFOCONbits.ROSEL  = 0;       // Output base clock showing clock switching
+	REFOCONbits.RODIV  = 0b0000;
 }
 
 

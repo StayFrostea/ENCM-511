@@ -9,6 +9,7 @@
       <itemPath>TimeDelay.h</itemPath>
       <itemPath>IOs.h</itemPath>
       <itemPath>ADC.h</itemPath>
+      <itemPath>meter.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -23,6 +24,7 @@
       <itemPath>UART2.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>ADC.c</itemPath>
+      <itemPath>meter.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

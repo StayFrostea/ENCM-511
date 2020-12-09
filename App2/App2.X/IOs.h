@@ -16,16 +16,11 @@
 
 extern uint8_t CNflag;
 
-typedef enum Mode {
-	VOLT,
-	OHM,
-	PULSE,
-	IDLE
-} Mode;
-
-void IOinit(void);
+void initIO(void);
 void IOcheck(void);
 void IOmain(void);
+
+void initRefOsc(void);
 
 void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void);
 

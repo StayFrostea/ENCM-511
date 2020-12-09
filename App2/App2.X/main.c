@@ -13,6 +13,11 @@
 #include "TimeDelay.h"
 #include "IOs.h"
 #include "UART2.h"
+#include "ADC.h"
+#include "meter.h"
+
+// Conditional compilation of the pulse meter functionality
+#define MIDTERM 1
 
 // Clock control
 #pragma config IESO     = OFF     // 2 Speed Startup disabled
@@ -24,9 +29,6 @@
 #pragma config OSCIOFNC = ON      // CLKO output disabled on pin 8, use as IO.
 #pragma config POSCMOD  = NONE    // Primary oscillator mode is disabled
 
-// Global variables
-uint8_t CNflag = 0;
-
 // Macros for power-saving modes
 #define Nop()    {__asm__ volatile ("nop");}
 #define ClrWdt() {__asm__ volatile ("clrwdt");}
@@ -36,46 +38,56 @@ uint8_t CNflag = 0;
 #define Idle()   {__asm__ volatile ("pwrsav #1");}
 #define dsen()   {__asm__ volatile ("BSET DSCON, #15");}
 
+// Global variables
+uint8_t CNflag = 0;
+enum Mode mode = IDLE;
+
+// Local helper functions for main()
+void loop(void);
+void init(void);
+
 
 int main(void)
 {
-	// Clock output on REFO/RB15 - Testing purposes only
-	TRISBbits.TRISB15  = 0;       // Set RB15 as output for REFO
-	REFOCONbits.ROEN   = 1;       // Ref oscillator is enabled
-	REFOCONbits.ROSSLP = 0;       // Ref oscillator is disabled in sleep
-	REFOCONbits.ROSEL  = 0;       // Output base clock showing clock switching
-	REFOCONbits.RODIV  = 0b0000;
-
-	// Change Clock
-	NewClk(32);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
-
-	// Initialize IOs for low-power wake-up
-	AD1PCFG = 0xFFFF;  // Turn all analog pins as digital
-	IOinit();          // Enable IO and CN interrupts on Push buttons
-
-	while (1) {
-		IOmain();
-	}
-	return 0;
-
-	/* TODO: Each iteration, switch about the state variable to determine
-	 *       which function to call.
-	 *       Within each state, use the ADC to sample.
-	 *       ADC interrupt should have higher priority than
-	 *       CN interrupt, which is higher than timers.
-	 */
-}
-
-/*
-int main(void) {
-	// Change Clock
-	NewClk(32);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
-
-	while(1) {
-		// Display to terminal the bar graph along with the value
-		drawGraph(do_ADC() );
-	}
-
+	init();
+	while (1)
+		loop();
 	return 0;
 }
+
+
+void init(void)
+{
+	initRefOsc();
+	NewClk(32);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
+	initIO();
+	initADC();
+}
+
+
+void loop(void)
+{
+	switch (mode) {
+		case VOLT:
+			voltmeter();
+			break;
+		case OHM:
+			ohmmeter();
+			break;
+		case PULSE:
+			#if MIDTERM
+				pulsemeter();
+				break;
+			#endif
+		case IDLE:
+			Idle();  // FIXME: Set the proper interrupt flags
+	}
+}
+
+
+/* TODO: Each iteration, switch about the state variable to determine
+ *       which function to call.
+ *       Within each state, use the ADC to sample.
+ *       ADC interrupt should have higher priority than
+ *       CN interrupt, which is higher than timers.
  */
