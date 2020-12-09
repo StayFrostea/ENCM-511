@@ -8,18 +8,23 @@
 #include <xc.h>
 #include <math.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "UART2.h"
 
 unsigned int clkval;
+bool doneflag = false;
 
 
-void InitUART2(void)
-/* Initialization of UART 2 module */
+void initUART2(void)
+/* Initialization of UART 2 module.  Call this before any function below*/
 {
 	// Configure UART2 module on pins RB0 (Tx) and RB1 (Rx) on PIC24F16KA101.
 	// Enable UART2.
 	// Set to Baud 4800 with 500kHz clock on PIC24F.
+
+	doneflag = false;
+	if (U2MODEbits.UARTEN) return;  // Skip if it's already on
 
 	TRISBbits.TRISB0 = 0;
 	TRISBbits.TRISB1 = 1;
@@ -41,22 +46,13 @@ void InitUART2(void)
 	U2MODEbits.PDSEL  = 0;  // Bits1,2 8bit, No Parity
 	U2MODEbits.STSEL  = 0;  // Bit0 One Stop Bit
 	 */
-	if (OSCCONbits.COSC == 0b110) {
-		// Gives a baud rate of 4807.7 Baud with 500kHz clock
-		// Set Baud to 4800 on realterm
-		U2BRG = 12;
-	} else if (OSCCONbits.COSC == 0b101) {
-		// Gives a baud rate of 300 Baud with 32kHz clock
-		// Set Baud to 300 on realterm
-		U2BRG = 12;
-	} else if (OSCCONbits.COSC == 0b000) {
-		U2BRG = 103;  // Gives a baud rate of 9600 with 8MHz clock
-		// Set Baud to 9600 on realterm
-	}
+
+	setBaudUART2();
+
 	// Load all values in for U1STA SFR
-	U2STA = 0b1010000000000000;
+	U2STA = 0b0010000000000000;
 	/*
-	U2STAbits.UTXISEL1 = 1;  // Bit15 Int when Char is transferred (1/2 config!)
+	U2STAbits.UTXISEL1 = 0;  // Bit15 Int when Char is transferred (1/2 config!)
 	U2STAbits.UTXISEL0 = 1;  // Generate interrupt with last character shifted out of U2TXREG buffer.
 	U2STAbits.UTXINV   = 0;  // Bit14 N/A, IRDA config
 	U2STAbits.UTXBRK   = 0;  // Bit11 Disabled
@@ -71,53 +67,95 @@ void InitUART2(void)
 	U2STAbits.OERR     = 0;  // Bit1 *Read Only Bit*
 	U2STAbits.URXDA    = 0;  // Bit0 *Read Only Bit*
 	 */
+
 	IFS1bits.U2TXIF = 0;     // Clear the Transmit Interrupt Flag
 	IPC7bits.U2TXIP = 3;     // UART2 Tx interrupt has interrupt priority 3-4th highest priority.
+	setTxIntrModeUART2(TX_BUF_AVAIL); // Interrupt when there is room in the transmit buffer
 
-	IEC1bits.U2TXIE = 1;     // Enable Transmit Interrupts
 	IFS1bits.U2RXIF = 0;     // Clear the Receive Interrupt Flag
 	IPC7bits.U2RXIP = 4;     // UART2 Rx interrupt has 2nd highest priority
 	IEC1bits.U2RXIE = 0;     // Disable Receive Interrupts
 
 	U2MODEbits.UARTEN = 1;   // And turn the peripheral on
-
 	U2STAbits.UTXEN = 1;
 	return;
 }
 
 
-void XmitUART2(char CharNum, unsigned int repeatNo)
-/* Xmit UART2:
- * Displays 'DispData' on realterm 'repeatNo' of times using UART to PC.
- * Adjust Baud on realterm as per clock:
- * 32kHz clock - Baud=300
+inline void setTxIntrModeUART2(const enum UART_Tx_Intr_Mode mode)
+/* Set the transmit interrupt mode bits for UART2 */
+{
+	switch (mode) {
+	case TX_BUF_EMPTY:
+		U2STAbits.UTXISEL0 = 0;
+		U2STAbits.UTXISEL1 = 1;
+		break;
+	case TX_BUF_AVAIL:
+		U2STAbits.UTXISEL0 = 0;
+		U2STAbits.UTXISEL1 = 0;
+		break;
+	case TX_DONE:
+		U2STAbits.UTXISEL0 = 1;
+		U2STAbits.UTXISEL1 = 0;
+	}
+	IEC1bits.U2TXIE = 1;  // Enable Transmit Interrupts
+}
+
+
+void setBaudUART2(void)
+/* Set the baud rate for UART2 based on the CPU clock.
+ * 32kHz  clock - Baud=300
  * 500kHz clock - Baud=4800
+ * 8MHz   clock - Baud=9600
  */
 {
-	InitUART2();            // Initialize UART2 module and turn it on
-	while (repeatNo != 0) {
-		// Just loop here till the FIFO buffers have room for one more entry
-		while (U2STAbits.UTXBF == 1) {
-//			Idle();         // Commented to try out serialplot app
-		}
-		U2TXREG = CharNum;  // Move Data to be displayed in UART FIFO buffer
-		repeatNo--;
+	U2MODEbits.UARTEN = 0;  // Turn it off first
+
+	if (OSCCONbits.COSC == 0b110) {
+		// Gives a baud rate of 4807.7 Baud with 500kHz clock
+		// Set Baud to 4800 on realterm
+		U2BRG = 12;
+	} else if (OSCCONbits.COSC == 0b101) {
+		// Gives a baud rate of 300 Baud with 32kHz clock
+		// Set Baud to 300 on realterm
+		U2BRG = 12;
+	} else if (OSCCONbits.COSC == 0b000) {
+		U2BRG = 103;  // Gives a baud rate of 9600 with 8MHz clock
+		// Set Baud to 9600 on realterm
 	}
+}
 
-	while (U2STAbits.TRMT == 0) {
-		// Turn off UART2 upon transmission of last character.
-		// Also can be verified in interrupt subroutine U2TXInterrupt()
-//		Idle();
+void endUART2(void)
+/* Gracefully begin to close the UART2 module in a non-blocking way.
+ * Call this after a block of writes is finished.
+ */
+{
+	if (U2STAbits.TRMT) return;
+	doneflag = true;
+	setTxIntrModeUART2(TX_DONE);
+}
+
+
+void writeUART2(char c)
+/* Write one character c over the UART2 interface.
+ * This function relies on the UART interface already running.
+ */
+{
+	if (!c) return;
+	while (U2STAbits.UTXBF) {
+		setTxIntrModeUART2(TX_BUF_AVAIL);
+		Idle();
 	}
+	U2TXREG = c;
+}
 
-	/* TODO: Block until the byte is in the buffer, as above.
-	 *       Then, return from this function and turn off the UART module
-	 *       in the Tx ISR if the buffer is empty.
-	 */
 
-	U2MODEbits.UARTEN = 0;
-	LATBbits.LATB9 = 1;
-	return;
+void nWriteUART2(char c, unsigned int n)
+/* Write character c over the UART2 interface, n times. */
+{
+	if (!n || !c) return;
+	for ( ; n > 0; --n)
+		writeUART2(c);
 }
 
 
@@ -130,7 +168,32 @@ void __attribute__((interrupt, no_auto_psv)) _U2RXInterrupt(void)
 
 void __attribute__((interrupt, no_auto_psv)) _U2TXInterrupt(void)
 {
-	IFS1bits.U2TXIF = 0;
+	IFS1bits.U2TXIF = 0;  // Clear the interrupt flag
+	IEC1bits.U2TXIE = 1;  // Disable transmit interrupts
+
+	// If the TSR and Tx buffer are empty, turn off the module
+	if (doneflag && U2STAbits.TRMT) {
+		U2MODEbits.UARTEN = 0;
+		LATBbits.LATB9 = 1;
+		doneflag = false;
+	}
+}
+
+
+void printUART2(char *str)
+/* Display a string of characters */
+{
+	if (!str) return;
+
+ //	nWriteUART2('\n', 2);
+//	writeUART2('\r');
+
+	unsigned int i = 0;
+	while (str[i])
+		writeUART2(str[i++]);
+
+//	nWriteUART2('\n', 2);
+//	writeUART2('\r');
 }
 
 
@@ -139,9 +202,9 @@ void Disp2Hex(unsigned int DispData)
 {
 	char i;
 	char nib = 0x00;
-	XmitUART2(' ', 1);  // Disp Gap
-	XmitUART2('0', 1);  // Disp Hex notation 0x
-	XmitUART2('x', 1);
+	writeUART2(' ');  // Disp Gap
+	writeUART2('0');  // Disp Hex notation 0x
+	writeUART2('x');
 
 	for (i = 3; i >= 0; i--) {
 		nib = ((DispData >> (4 * i)) & 0x000F);
@@ -150,10 +213,10 @@ void Disp2Hex(unsigned int DispData)
 		} else {
 			nib = nib + 0x30;  // For hex values 0-9
 		}
-		XmitUART2(nib, 1);
+		writeUART2(nib);
 	}
 
-	XmitUART2(' ', 1);
+	writeUART2(' ');
 	DispData = 0x0000;  // Clear DispData
 	return;
 }
@@ -164,9 +227,9 @@ void Disp2Hex32(unsigned long int DispData32)
 {
 	char i;
 	char nib = 0x00;
-	XmitUART2(' ', 1);  // Disp Gap
-	XmitUART2('0', 1);  // Disp Hex notation 0x
-	XmitUART2('x', 1);
+	writeUART2(' ');  // Disp Gap
+	writeUART2('0');  // Disp Hex notation 0x
+	writeUART2('x');
 
 	for (i = 7; i >= 0; i--) {
 		nib = ((DispData32 >> (4 * i)) & 0x000F);
@@ -175,10 +238,10 @@ void Disp2Hex32(unsigned long int DispData32)
 		} else {
 			nib = nib + 0x30;  // For hex values 0-9
 		}
-		XmitUART2(nib, 1);
+		writeUART2(nib);
 	}
 
-	XmitUART2(' ', 1);
+	writeUART2(' ');
 	DispData32 = 0x00000000;   // Clear DispData
 	return;
 }
@@ -190,33 +253,17 @@ void Disp2Dec(uint16_t Dec_num)
 	uint8_t rem;        // Remainder in div by 10
 	uint16_t quot;
 	uint8_t ctr = 0;    // Counter
-	XmitUART2(' ', 1);  // Disp Gap
+	writeUART2(' ');  // Disp Gap
 
 	while (ctr < 2) {   // TODO: check this value
 		quot = Dec_num / (pow(10, (4 - ctr)));
 		rem = quot % 10;
-		XmitUART2(rem + 0x30, 1);
+		writeUART2(rem + 0x30);
 		ctr = ctr + 1;
 	}
-	XmitUART2(' ', 1);  // Disp Gap
-//	XmitUART2('\n',1);  // Newline
-//	XmitUART2('\r',1);  // Carriage return
-
-	return;
-}
-
-
-void Disp2String(char *str)
-/* Display a string of characters */
-{
-	unsigned int i;
-//	XmitUART2(0x0A,2);  // LF
-//	XmitUART2(0x0D,1);  // CR
-	for (i = 0; i <= strlen(str); i++) {
-		XmitUART2(str[i], 1);
-	}
-//	XmitUART2(0x0A,2);  // LF
-//	XmitUART2(0x0D,1);  // CR
+	writeUART2(' ');  // Disp Gap
+//	writeUART2('\n');  // Newline
+//	writeUART2('\r');  // Carriage return
 
 	return;
 }

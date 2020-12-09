@@ -8,15 +8,27 @@
 #ifndef UART2_H
 #define UART2_H
 
-void InitUART2(void);
-void XmitUART2(char, unsigned int);
+void initUART2(void);
+void setBaudUART2(void);
+void endUART2(void);
+
+void nWriteUART2(char c, unsigned int n);
+void writeUART2(char c);
+void printUART2(char *str);
 
 void __attribute__((interrupt, no_auto_psv)) _U2RXInterrupt(void);
 void __attribute__((interrupt, no_auto_psv)) _U2TXInterrupt(void);
 
 void Disp2Hex(unsigned int);
 void Disp2Hex32(unsigned long int);
-void Disp2String(char*);
 void Disp2Dec(unsigned int);
+
+enum UART_Tx_Intr_Mode {
+	TX_BUF_AVAIL,
+	TX_DONE,
+	TX_BUF_EMPTY
+};
+
+inline void setTxIntrModeUART2(const enum UART_Tx_Intr_Mode mode);
 
 #endif /* UART2_H */
