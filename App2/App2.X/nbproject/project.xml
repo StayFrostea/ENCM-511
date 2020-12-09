@@ -29,6 +29,7 @@
             <word>Int</word>
             <word>realterm</word>
             <word>serialplot</word>
+            <word>Tosc</word>
             <word>Xmit</word>
         </spellchecker-wordlist>
     </configuration>

@@ -39,7 +39,6 @@
 #define dsen()   {__asm__ volatile ("BSET DSCON, #15");}
 
 // Global variables
-uint8_t CNflag = 0;
 enum Mode mode = IDLE;
 
 // Local helper functions for main()
@@ -61,7 +60,6 @@ void init(void)
 	initRefOsc();
 	NewClk(32);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
 	initIO();
-	initADC();
 }
 
 
@@ -83,11 +81,3 @@ void loop(void)
 			Idle();  // FIXME: Set the proper interrupt flags
 	}
 }
-
-
-/* TODO: Each iteration, switch about the state variable to determine
- *       which function to call.
- *       Within each state, use the ADC to sample.
- *       ADC interrupt should have higher priority than
- *       CN interrupt, which is higher than timers.
- */

@@ -14,11 +14,11 @@
 // LED output pin (RB8); active-high; read/write
 #define LED (LATBbits.LATB8)
 
-extern uint8_t CNflag;
-
 void initIO(void);
+/*
 void IOcheck(void);
 void IOmain(void);
+ */
 
 void initRefOsc(void);
 

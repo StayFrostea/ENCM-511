@@ -19,7 +19,6 @@ void delay_ms(uint16_t time_ms, uint8_t idle_on)
 	T2CONbits.TSIDL = 0;  // Operate in idle mode
 	T2CONbits.T32 = 0;    // Operate timer 2 as 16 bit timer
 	T2CONbits.TCS = 0;    // Use internal clock
-//	T2CONbits.TGATE = 0;
 
 	// Timer 2 interrupt config
 	IPC1bits.T2IP = 2;    // 7 is highest and 1 is lowest priority

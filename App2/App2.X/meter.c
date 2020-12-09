@@ -13,6 +13,7 @@
 void voltmeter()
 {
 	// Measure voltage and send via UART
+//	initADC();
 }
 
 

@@ -4,6 +4,7 @@
  */
 
 #include <xc.h>
+#include <stdbool.h>
 #include "ChangeClk.h"
 #include "TimeDelay.h"
 #include "IOs.h"
@@ -35,11 +36,11 @@ void initIO(void)
 	IEC1bits.CNIE = 1;      // Enable CN interrupts
 }
 
-
+/*
 uint16_t time      = 0;  // Time displayed on the terminal
 uint16_t pressTime = 0;  // Time RB4 is pressed in ms
-uint16_t resetFlag = 1;  // Flag to avoid printing ALARM when the timer is reset to 0.
-uint16_t runFlag   = 0;  // Flag to indicate that the timer is running
+bool resetFlag = 1;  // Flag to avoid printing ALARM when the timer is reset to 0.
+bool runFlag   = 0;  // Flag to indicate that the timer is running
 
 
 void IOcheck(void)
@@ -48,7 +49,7 @@ void IOcheck(void)
 	// Pushbutton debouncing
 	IEC1bits.CNIE = 0;  // Disable CN interrupts
 	delay_ms(400, 1);   // 400ms delay to filter out bounces
-	IEC1bits.CNIE = 1;  // Enable CN interrupts to detect PB release
+	IEC1bits.CNIE = 1;  // Enable CN interrupts to detect pushbutton release
 
 	// PB1 Instructions:
 	while (PB1 && !PB2 && !PB3) {  // While only PB1 is pressed
@@ -132,7 +133,7 @@ void IOmain()
 
 	NewClk(32);  // Slow down clock for delay and other tasks
 }
-
+*/
 
 void initRefOsc(void)
 {
@@ -142,6 +143,7 @@ void initRefOsc(void)
 	REFOCONbits.ROSSLP = 0;       // Ref oscillator is disabled in sleep
 	REFOCONbits.ROSEL  = 0;       // Output base clock showing clock switching
 	REFOCONbits.RODIV  = 0b0000;
+	// TODO: Use a macro or something to set this to what's required
 }
 
 
