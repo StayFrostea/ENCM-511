@@ -42,10 +42,10 @@ void initRefOsc(void)
 {
 	// Clock output on REFO/RB15
 	TRISBbits.TRISB15  = 0;       // Set RB15 as output for REFO
-	REFOCONbits.ROSSLP = 0;       // Ref oscillator is disabled in sleep
+	REFOCONbits.ROSSLP = 1;       // Ref oscillator is disabled in sleep
 	REFOCONbits.ROSEL  = 0;       // Output base clock showing clock switching
-	REFOCONbits.RODIV  = 0b0000;
-	REFOCONbits.ROEN   = 0;       // Ref oscillator is enabled
+	REFOCONbits.RODIV  = 0b1001;
+	REFOCONbits.ROEN   = 1;       // Ref oscillator is enabled
 	// TODO: Use a macro or something to set this to what's required
 }
 

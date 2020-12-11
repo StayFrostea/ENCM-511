@@ -24,7 +24,7 @@ void initUART2(void)
 	// Set to Baud 4800 with 500kHz clock on PIC24F.
 
 	doneflag = false;
-	if (U2MODEbits.UARTEN) return;  // Skip if it's already on
+//	if (U2MODEbits.UARTEN) return;  // Skip if it's already on
 
 	TRISBbits.TRISB0 = 0;
 	TRISBbits.TRISB1 = 1;
@@ -130,9 +130,11 @@ void endUART2(void)
  * Call this after a block of writes is finished.
  */
 {
-	if (U2STAbits.TRMT) return;
+	if (!U2MODEbits.UARTEN) return;
 	doneflag = true;
 	setTxIntrModeUART2(TX_DONE);
+	while (!U2STAbits.TRMT) Idle();
+	U2MODEbits.UARTEN = 0;
 }
 
 
@@ -154,7 +156,7 @@ void nWriteUART2(char c, unsigned int n)
 /* Write character c over the UART2 interface, n times. */
 {
 	if (!n || !c) return;
-	for ( ; n > 0; --n)
+	while (n-- > 0)
 		writeUART2(c);
 }
 
@@ -280,10 +282,10 @@ void printFloat(float val)
  * Currently supports only 1 digit before and 4 after the decimal. */
 // TODO: improve this?
 {
-	char ones = (char)val;
-	writeUART2(ones + 0x30);  // Print the ones place first
+	uint32_t whole = (uint32_t)val;
+	printUint((uint32_t)val, 10, false);  // Print the integer part first
 	writeUART2('.');
-	printUint((uint32_t)(1000*(val - ones) + 0.5), 3, true);  // Add 0.5 for rounding
+	printUint((uint32_t)(1000*(val - whole) + 0.5), 3, true);  // Add 0.5 for rounding
 }
 
 void clearLine(void)

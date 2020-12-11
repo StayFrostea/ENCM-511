@@ -22,4 +22,6 @@ void voltmeter(bool do_init);
 void ohmmeter(bool do_init);
 void pulsemeter(bool do_init);
 
+inline uint32_t get_instruction_period_ns(void);
+
 #endif /* METER_H */

@@ -2,6 +2,7 @@
 #define ADC_H
 
 #include <xc.h>
+#include <stdbool.h>
 
 #define ADC_BUF_LEN 16
 
@@ -13,7 +14,7 @@ enum AN_pin {
 
 extern uint16_t ADC_buf[ADC_BUF_LEN];
 
-void initADC(enum AN_pin input);
+void initADC(enum AN_pin input, bool fast);
 void beginADC(void);
 
 void __attribute__((interrupt, no_auto_psv)) _ADC1Interrupt(void);

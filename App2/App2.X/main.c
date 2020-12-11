@@ -17,7 +17,7 @@
 
 /* Conditional compilation of the pulse meter functionality.
  * Toggle this on and off to switch between App2 and the Midterm. */
-#define MIDTERM 0
+#define MIDTERM 1
 
 // Clock control
 #pragma config IESO     = OFF     // 2 Speed Startup disabled
