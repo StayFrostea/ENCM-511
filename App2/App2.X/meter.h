@@ -10,7 +10,7 @@ enum Mode {
 	IDLE
 };
 
-extern enum Mode mode;
+extern enum Mode mode;  // Global mode/state variable
 
 void initVoltmeter(void);
 void initOhmmeter(void);

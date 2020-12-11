@@ -14,7 +14,11 @@ DelayCallbackPtr callback = NULL;
 
 
 void delay_ms(uint16_t time_ms, uint8_t idle_on)
+/* Use timers and interrupts to wait for a certain number of milliseconds.
+ * Time is an approximation for clock frequencies other than 32kHz. */
 {
+	T2CONbits.TON = 0;    // Stop timer
+
 	// T2CON config
 	T2CONbits.TSIDL = 0;  // Operate in idle mode
 	T2CONbits.T32 = 0;    // Operate timer 2 as 16 bit timer
@@ -25,13 +29,27 @@ void delay_ms(uint16_t time_ms, uint8_t idle_on)
 	IEC0bits.T2IE = 1;    // Enable timer interrupt
 	IFS0bits.T2IF = 0;    // Clear timer 2 flag
 
-	PR2 = time_ms << 4;   // After PR2 simplification
+	if (OSCCONbits.COSC == 0b110) {  // If the clock is 500kHz
+		T2CONbits.TCKPS = 0b00;  // Set the timer prescaler to 64
+		PR2 = time_ms << 2;
+	} else if (OSCCONbits.COSC == 0b101) {  // If the clock is 32kHz
+		T2CONbits.TCKPS = 0b00;  // Set the timer prescaler to 1
+		PR2 = time_ms << 4;
+	} else if (OSCCONbits.COSC == 0b000) {  // If the clock is 8MHz
+		T2CONbits.TCKPS = 0b11;  // Set the timer prescaler to 256
+		PR2 = time_ms << 4;
+	} else {
+		// Undefined
+	}
+
+
 	TMR2 = 0;             // Reset the counter
 	T2CONbits.TON = 1;    // Start timer
 
 	if (idle_on)
 		Idle();
 }
+
 
 void delay_ms_callback(uint16_t time_ms, DelayCallbackPtr cb)
 /* Start a timer and return immediately, calling the given callback
@@ -52,9 +70,9 @@ void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void)
 	IFS0bits.T2IF = 0;  // Clear timer 2 interrupt flag
 	T2CONbits.TON = 0;  // Stop timer
 
+	// Call the callback function if not null
 	if (callback) {
 		callback();
 		callback = NULL;
 	}
-	return;
 }

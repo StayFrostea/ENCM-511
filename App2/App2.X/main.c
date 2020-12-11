@@ -59,11 +59,12 @@ void init(void)
 	initRefOsc();
 	// TODO: Control clock according to macros
 	NewClk(8);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
-	initIO();
+
 	initUART2();
+	initIO();
 
 	// TODO: Move the following to the mode-switch code
-	initVoltmeter();
+//	initVoltmeter();
 }
 
 
@@ -82,6 +83,7 @@ void loop(void)
 				break;
 			#endif
 		case IDLE:
+			// TODO: Disable other peripherals
 			Idle();
 	}
 }
