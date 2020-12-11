@@ -2,6 +2,7 @@
 #define METER_H
 
 #include <xc.h>
+#include <stdbool.h>
 
 enum Mode {
 	VOLT,
@@ -16,8 +17,8 @@ void initVoltmeter(void);
 void initOhmmeter(void);
 void initPulsemeter(void);
 
-void voltmeter(void);
-void ohmmeter(void);
-void pulsemeter(void);
+void voltmeter(bool do_init);
+void ohmmeter(bool do_init);
+void pulsemeter(bool do_init);
 
 #endif /* METER_H */

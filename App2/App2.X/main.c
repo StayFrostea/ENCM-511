@@ -38,7 +38,9 @@
 #define dsen()   {__asm__ volatile ("BSET DSCON, #15");}
 
 // Global variables
-enum Mode mode = VOLT;
+enum Mode mode = IDLE;
+enum Mode prev_mode = IDLE;
+
 
 // Local helper functions for main()
 void loop(void);
@@ -62,24 +64,25 @@ void init(void)
 
 	initUART2();
 	initIO();
-
-	// TODO: Move the following to the mode-switch code
-//	initVoltmeter();
 }
 
 
 void loop(void)
 {
+	// If the mode has changed, tell the functions to setup
+	bool newmode = (mode != prev_mode);
+	prev_mode = mode;
+
 	switch (mode) {
 		case VOLT:
-			voltmeter();
+			voltmeter(newmode);
 			break;
 		case OHM:
-			ohmmeter();
+			ohmmeter(newmode);
 			break;
 		case PULSE:
 			#if MIDTERM
-				pulsemeter();
+				pulsemeter(newmode);
 				break;
 			#endif
 		case IDLE:
