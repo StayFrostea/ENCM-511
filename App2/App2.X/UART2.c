@@ -247,22 +247,27 @@ void Disp2Hex32(unsigned long int DispData32)
 }
 
 
-void Disp2Dec(uint16_t Dec_num)
+void printU16(uint16_t val, int digits)
 /* Display a 16-bit unsigned int in decimal form */
 {
 	uint8_t rem;        // Remainder in div by 10
 	uint16_t quot;
-	uint8_t ctr = 0;    // Counter
-	writeUART2(' ');    // Disp Gap
 
-	for ( ; ctr <= 3; ++ctr) {
-		quot = Dec_num / (pow(10, (3 - ctr)));
+	while (digits > 0) {
+		quot = val / pow(10, --digits);
 		rem = quot % 10;
 		writeUART2(rem + 0x30);
 	}
-	writeUART2(' ');   // Disp Gap
-//	writeUART2('\n');  // Newline
-//	writeUART2('\r');  // Carriage return
+}
 
-	return;
+
+void printFloat(float val)
+/* Display a 32-bit floating point number in decimal form.
+ * Currently supports only 1 digit before and 4 after the decimal. */
+// TODO: improve this?
+{
+	char ones = (char)val;
+	writeUART2(ones + 0x30);  // Print the ones place first
+	writeUART2('.');
+	printU16((uint16_t)(1000*(val - ones) + 0.5), 3);  // Add 0.5 for rounding
 }
