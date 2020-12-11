@@ -247,8 +247,8 @@ void Disp2Hex32(unsigned long int DispData32)
 }
 
 
-void printU16(uint16_t val, int digits)
-/* Display a 16-bit unsigned int in decimal form */
+void printUint(uint32_t val, int digits)
+/* Display a 32-bit unsigned int in decimal form */
 {
 	uint8_t rem;        // Remainder in div by 10
 	uint16_t quot;
@@ -269,7 +269,7 @@ void printFloat(float val)
 	char ones = (char)val;
 	writeUART2(ones + 0x30);  // Print the ones place first
 	writeUART2('.');
-	printU16((uint16_t)(1000*(val - ones) + 0.5), 3);  // Add 0.5 for rounding
+	printUint((uint32_t)(1000*(val - ones) + 0.5), 3);  // Add 0.5 for rounding
 }
 
 void clearLine(void)

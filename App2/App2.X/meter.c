@@ -20,6 +20,7 @@ void initVoltmeter(void)
 	initUART2();
 	initADC(AN5);
 	beginADC();
+	clearLine();
 }
 
 
@@ -36,23 +37,18 @@ void voltmeter(bool do_init)
 	 * Check if the ADC ISR has cleared ASAM yet. */
 	while(AD1CON1bits.ASAM) Idle();
 
-	/* Copy the data into the working buffer and begin
-	 * autosampling immediately while we process the old data. */
-//	memcpy(ADC_buf, (void*)&ADC1BUF0, sizeof(ADC_buf[0])*ADC_BUF_LEN);
-
-//	 Average the samples
+	// Average the samples
 	for (i = 0; i < ADC_BUF_LEN; i++)
 		avg += (&ADC1BUF0)[i];
 
 	AD1CON1bits.ASAM = 1;  // We can begin autosampling now that we've read the buffer
-	avg >>= 4;  // Divide by 16
+	avg >>= 4;             // Divide by 16
 
-	voltage = avg * Vdd / 1024;  // Convert to voltage
+	voltage = (avg * Vdd) / 1024;  // Convert to voltage
 
 	printUART2("\rVOLTMETER Voltage = ");
-//	printU16(avg, 4);
 	printFloat(voltage);
-	printUART2("V        \r");
+	writeUART2('V');
 }
 
 
@@ -60,25 +56,41 @@ void initOhmmeter(void)
 {
 	initUART2();
 	initADC(AN11);
+//	initADC(AN5);
 	beginADC();
 	clearLine();
-	printUART2("OHMMETER");
-
 }
 
 
 void ohmmeter(bool do_init)
 /* Measure resistance and send via UART */
 {
-	if (do_init) initOhmmeter();
-}
+	int i;
+	uint32_t avg = 0;
+	uint32_t r;
 
+	if (do_init) initOhmmeter();
+
+	while(AD1CON1bits.ASAM) Idle();
+
+	// Average the samples
+	for (i = 0; i < ADC_BUF_LEN; i++)
+		avg += (&ADC1BUF0)[i];
+
+	AD1CON1bits.ASAM = 1;  // We can begin autosampling now that we've read the buffer
+	avg >>= 4;             // Divide by 16
+
+	r = (1000 * avg) / (1024 - avg);  // Convert to resistance
+
+	printUART2("\rOHMMETER Resistance = ");
+	printUint(r, 6);
+	printUART2(" Ohm");
+}
 
 void initPulsemeter(void)
 {
 	initUART2();
 	clearLine();
-	printUART2("PULSEMETER");
 }
 
 
@@ -86,6 +98,12 @@ void pulsemeter(bool do_init)
 /* Measure frequency and amplitude and send via UART */
 {
 	if (do_init) initPulsemeter();
+
+	/* Copy the data into the working buffer and begin
+	 * autosampling immediately while we process the old data. */
+//	memcpy(ADC_buf, (void*)&ADC1BUF0, sizeof(ADC_buf[0])*ADC_BUF_LEN);
+
+	printUART2("\rPULSEMETER Freq = ___kHz, Amplitude = ____V");
 }
 
 

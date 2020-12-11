@@ -21,7 +21,7 @@ void __attribute__((interrupt, no_auto_psv)) _U2TXInterrupt(void);
 
 void Disp2Hex(unsigned int);
 void Disp2Hex32(unsigned long int);
-void printU16(uint16_t val, int digits);
+void printUint(uint32_t val, int digits);
 void printFloat(float val);
 void clearLine(void);
 

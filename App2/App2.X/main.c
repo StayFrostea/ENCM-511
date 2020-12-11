@@ -16,7 +16,7 @@
 #include "meter.h"
 
 // Conditional compilation of the pulse meter functionality
-#define MIDTERM 0
+#define MIDTERM 1
 
 // Clock control
 #pragma config IESO     = OFF     // 2 Speed Startup disabled
@@ -39,7 +39,7 @@
 
 // Global variables
 enum Mode mode = IDLE;
-enum Mode prev_mode = IDLE;
+enum Mode prev_mode = VOLT;
 
 
 // Local helper functions for main()
