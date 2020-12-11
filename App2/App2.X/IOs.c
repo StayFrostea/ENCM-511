@@ -32,7 +32,7 @@ void initIO(void)
 	CNEN1bits.CN1IE   = 1;  // Enable CN on CN1
 
 	// CN Interrupt settings
-	IPC4bits.CNIP = 5;      // 7 is highest priority, 1 is lowest, 0 is disabled
+	IPC4bits.CNIP = 2;      // 7 is highest priority, 1 is lowest, 0 is disabled
 	IFS1bits.CNIF = 0;      // Clear interrupt flag
 	IEC1bits.CNIE = 1;      // Enable CN interrupts
 }

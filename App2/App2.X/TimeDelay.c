@@ -21,7 +21,7 @@ void delay_ms(uint16_t time_ms, uint8_t idle_on)
 	T2CONbits.TCS = 0;    // Use internal clock
 
 	// Timer 2 interrupt config
-	IPC1bits.T2IP = 2;    // 7 is highest and 1 is lowest priority
+	IPC1bits.T2IP = 7;    // 7 is highest and 1 is lowest priority
 	IEC0bits.T2IE = 1;    // Enable timer interrupt
 	IFS0bits.T2IF = 0;    // Clear timer 2 flag
 

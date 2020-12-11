@@ -36,7 +36,6 @@ void initADC(enum AN_pin input)
 	IPC3bits.AD1IP = 6;           // 7 is highest priority, 1 is lowest, 0 is disabled
 	IEC0bits.AD1IE = 1;           // Enable ADC interrupts
 
-	// TODO: Choose ADC interrupt priority
 	// TODO: Allow each mode to choose appropriate SAMC, ADCS, and SMPI values
 }
 
