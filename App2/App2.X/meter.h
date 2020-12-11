@@ -16,6 +16,7 @@ extern enum Mode mode;  // Global mode/state variable
 void initVoltmeter(void);
 void initOhmmeter(void);
 void initPulsemeter(void);
+void initIdle(void);
 
 void voltmeter(bool do_init);
 void ohmmeter(bool do_init);

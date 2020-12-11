@@ -23,6 +23,7 @@ void Disp2Hex(unsigned int);
 void Disp2Hex32(unsigned long int);
 void printU16(uint16_t val, int digits);
 void printFloat(float val);
+void clearLine(void);
 
 enum UART_Tx_Intr_Mode {
 	TX_BUF_AVAIL,

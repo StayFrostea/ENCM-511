@@ -271,3 +271,11 @@ void printFloat(float val)
 	writeUART2('.');
 	printU16((uint16_t)(1000*(val - ones) + 0.5), 3);  // Add 0.5 for rounding
 }
+
+void clearLine(void)
+/* Clear the previous line on the terminal. */
+{
+	writeUART2('\r');
+	nWriteUART2(' ', 50);  // Clear the previous line
+	writeUART2('\r');
+}

@@ -17,6 +17,7 @@ const float Vdd = 3.0;  // Supply voltage
 
 void initVoltmeter(void)
 {
+	initUART2();
 	initADC(AN5);
 	beginADC();
 }
@@ -46,9 +47,7 @@ void voltmeter(bool do_init)
 	AD1CON1bits.ASAM = 1;  // We can begin autosampling now that we've read the buffer
 	avg >>= 4;  // Divide by 16
 
-
-	// Convert to voltage
-	voltage = avg * Vdd / 1024;
+	voltage = avg * Vdd / 1024;  // Convert to voltage
 
 	printUART2("\rVOLTMETER Voltage = ");
 //	printU16(avg, 4);
@@ -59,7 +58,12 @@ void voltmeter(bool do_init)
 
 void initOhmmeter(void)
 {
-	printUART2("OHMMETER\n");
+	initUART2();
+	initADC(AN11);
+	beginADC();
+	clearLine();
+	printUART2("OHMMETER");
+
 }
 
 
@@ -72,7 +76,9 @@ void ohmmeter(bool do_init)
 
 void initPulsemeter(void)
 {
-	printUART2("PULSEMETER\n");
+	initUART2();
+	clearLine();
+	printUART2("PULSEMETER");
 }
 
 
@@ -80,4 +86,14 @@ void pulsemeter(bool do_init)
 /* Measure frequency and amplitude and send via UART */
 {
 	if (do_init) initPulsemeter();
+}
+
+
+initIdle(void)
+/* Set up for idle mode. */
+{
+	clearLine();
+	printUART2("IDLE...");
+	AD1CON1bits.ADON  = 0;   // Turn off ADC module
+	U2MODEbits.UARTEN = 1;   // Turn off UART
 }

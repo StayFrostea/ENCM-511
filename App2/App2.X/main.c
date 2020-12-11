@@ -16,7 +16,7 @@
 #include "meter.h"
 
 // Conditional compilation of the pulse meter functionality
-#define MIDTERM 1
+#define MIDTERM 0
 
 // Clock control
 #pragma config IESO     = OFF     // 2 Speed Startup disabled
@@ -86,7 +86,7 @@ void loop(void)
 				break;
 			#endif
 		case IDLE:
-			// TODO: Disable other peripherals
+			if (newmode) initIdle();
 			Idle();
 	}
 }
