@@ -61,6 +61,9 @@ void init(void)
 	NewClk(8);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
 	initIO();
 	initUART2();
+
+	// TODO: Move the following to the mode-switch code
+	initVoltmeter();
 }
 
 
@@ -68,9 +71,6 @@ void loop(void)
 {
 	switch (mode) {
 		case VOLT:
-			// TODO: Move the following to the mode-switch code
-			initADC(AN5);
-			beginADC();
 			voltmeter();
 			break;
 		case OHM:
@@ -82,6 +82,6 @@ void loop(void)
 				break;
 			#endif
 		case IDLE:
-			Idle();  // FIXME: Set the proper interrupt flags
+			Idle();
 	}
 }

@@ -5,7 +5,6 @@
  * Created on December 8, 2020, 5:38 PM
  */
 
-
 #include <xc.h>
 #include <string.h>
 #include "meter.h"
@@ -13,7 +12,15 @@
 #include "ADC.h"
 #include "IOs.h"
 
-void voltmeter()
+
+void initVoltmeter(void)
+{
+	initADC(AN5);
+	beginADC();
+}
+
+
+void voltmeter(void)
 /* Measure the voltage on AN5 and print over UART. */
 {
 	int i;
@@ -35,13 +42,25 @@ void voltmeter()
 }
 
 
-void ohmmeter()
+void initOhmmeter(void)
+{
+
+}
+
+
+void ohmmeter(void)
 {
 	// Measure resistance and send via UART
 }
 
 
-void pulsemeter()
+void initPulsemeter(void)
+{
+
+}
+
+
+void pulsemeter(void)
 {
 	// Measure frequency and amplitude and send via UART
 }

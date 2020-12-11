@@ -2,6 +2,7 @@
 #include "ADC.h"
 #include "IOs.h"
 
+
 uint16_t ADC_buf[ADC_BUF_LEN];  // Global ADC buffer
 
 void initADC(enum AN_pin input)

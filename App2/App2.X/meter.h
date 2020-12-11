@@ -12,6 +12,10 @@ enum Mode {
 
 extern enum Mode mode;
 
+void initVoltmeter(void);
+void initOhmmeter(void);
+void initPulsemeter(void);
+
 void voltmeter(void);
 void ohmmeter(void);
 void pulsemeter(void);
