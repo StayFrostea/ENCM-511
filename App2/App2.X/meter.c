@@ -83,8 +83,8 @@ void ohmmeter(bool do_init)
 	r = (1000 * avg) / (1024 - avg);  // Convert to resistance
 
 	printUART2("\rOHMMETER Resistance = ");
-	printUint(r, 6);
-	printUART2(" Ohm");
+	printUint(r, 6, false);
+	printUART2(" Ohm     ");
 }
 
 void initPulsemeter(void)
@@ -107,7 +107,7 @@ void pulsemeter(bool do_init)
 }
 
 
-initIdle(void)
+void initIdle(void)
 /* Set up for idle mode. */
 {
 	clearLine();

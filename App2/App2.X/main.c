@@ -15,8 +15,9 @@
 #include "ADC.h"
 #include "meter.h"
 
-// Conditional compilation of the pulse meter functionality
-#define MIDTERM 1
+/* Conditional compilation of the pulse meter functionality.
+ * Toggle this on and off to switch between App2 and the Midterm. */
+#define MIDTERM 0
 
 // Clock control
 #pragma config IESO     = OFF     // 2 Speed Startup disabled
@@ -58,7 +59,9 @@ int main(void)
 
 void init(void)
 {
-	initRefOsc();
+	#if MIDTERM
+		initRefOsc();
+	#endif
 	// TODO: Control clock according to macros
 	NewClk(8);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
 

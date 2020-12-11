@@ -5,6 +5,8 @@
  * Created on November 19, 2016, 9:22 PM
  */
 
+#include <stdbool.h>
+
 #ifndef UART2_H
 #define UART2_H
 
@@ -21,7 +23,7 @@ void __attribute__((interrupt, no_auto_psv)) _U2TXInterrupt(void);
 
 void Disp2Hex(unsigned int);
 void Disp2Hex32(unsigned long int);
-void printUint(uint32_t val, int digits);
+void printUint(uint32_t val, int digits, bool pad_zeros);
 void printFloat(float val);
 void clearLine(void);
 

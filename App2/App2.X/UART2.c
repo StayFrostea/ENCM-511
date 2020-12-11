@@ -247,16 +247,30 @@ void Disp2Hex32(unsigned long int DispData32)
 }
 
 
-void printUint(uint32_t val, int digits)
+void printUint(uint32_t val, int digits, bool pad_zeros)
 /* Display a 32-bit unsigned int in decimal form */
 {
 	uint8_t rem;        // Remainder in div by 10
 	uint16_t quot;
 
+	// If we're not padding, print at least one zero
+	if (!pad_zeros && val == 0) {
+		writeUART2('0');
+		return;
+	}
+
 	while (digits > 0) {
 		quot = val / pow(10, --digits);
 		rem = quot % 10;
-		writeUART2(rem + 0x30);
+
+		// Omit leading zeroes
+		if (rem == 0) {
+			if (pad_zeros)
+				writeUART2('0');
+		} else {
+			pad_zeros = true;
+			writeUART2(rem + 0x30);
+		}
 	}
 }
 
@@ -269,7 +283,7 @@ void printFloat(float val)
 	char ones = (char)val;
 	writeUART2(ones + 0x30);  // Print the ones place first
 	writeUART2('.');
-	printUint((uint32_t)(1000*(val - ones) + 0.5), 3);  // Add 0.5 for rounding
+	printUint((uint32_t)(1000*(val - ones) + 0.5), 3, true);  // Add 0.5 for rounding
 }
 
 void clearLine(void)
