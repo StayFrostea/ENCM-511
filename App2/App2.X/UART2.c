@@ -255,11 +255,10 @@ void Disp2Dec(uint16_t Dec_num)
 	uint8_t ctr = 0;    // Counter
 	writeUART2(' ');    // Disp Gap
 
-	while (ctr < 4) {   // TODO: check this value
-		quot = Dec_num / (pow(10, (4 - ctr)));
+	for ( ; ctr <= 3; ++ctr) {
+		quot = Dec_num / (pow(10, (3 - ctr)));
 		rem = quot % 10;
 		writeUART2(rem + 0x30);
-		ctr = ctr + 1;
 	}
 	writeUART2(' ');   // Disp Gap
 //	writeUART2('\n');  // Newline
