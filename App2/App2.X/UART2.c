@@ -253,15 +253,15 @@ void Disp2Dec(uint16_t Dec_num)
 	uint8_t rem;        // Remainder in div by 10
 	uint16_t quot;
 	uint8_t ctr = 0;    // Counter
-	writeUART2(' ');  // Disp Gap
+	writeUART2(' ');    // Disp Gap
 
-	while (ctr < 2) {   // TODO: check this value
+	while (ctr < 4) {   // TODO: check this value
 		quot = Dec_num / (pow(10, (4 - ctr)));
 		rem = quot % 10;
 		writeUART2(rem + 0x30);
 		ctr = ctr + 1;
 	}
-	writeUART2(' ');  // Disp Gap
+	writeUART2(' ');   // Disp Gap
 //	writeUART2('\n');  // Newline
 //	writeUART2('\r');  // Carriage return
 

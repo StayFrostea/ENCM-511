@@ -5,7 +5,6 @@
 
 #include <xc.h>
 #include <p24F16KA101.h>
-#include <stdio.h>
 #include <math.h>
 #include <errno.h>
 
@@ -39,7 +38,7 @@
 #define dsen()   {__asm__ volatile ("BSET DSCON, #15");}
 
 // Global variables
-enum Mode mode = IDLE;
+enum Mode mode = VOLT;
 
 // Local helper functions for main()
 void loop(void);
@@ -58,8 +57,10 @@ int main(void)
 void init(void)
 {
 	initRefOsc();
-	NewClk(32);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
+	// TODO: Control clock according to macros
+	NewClk(8);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
 	initIO();
+	initUART2();
 }
 
 
@@ -67,6 +68,9 @@ void loop(void)
 {
 	switch (mode) {
 		case VOLT:
+			// TODO: Move the following to the mode-switch code
+			initADC(AN5);
+			beginADC();
 			voltmeter();
 			break;
 		case OHM:
