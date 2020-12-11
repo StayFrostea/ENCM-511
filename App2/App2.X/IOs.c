@@ -15,6 +15,7 @@
 void initIO(void)
 /* Initialize GPIO and CN interrupts */
 {
+	AD1PCFG = 0xFFFF;		// Set all analog pins to digital
 	TRISBbits.TRISB8  = 0;  // Set GPIO RB8 as a digital output (LED)
 	LED               = 0;  // Turn the LED off
 
