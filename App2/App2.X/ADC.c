@@ -22,12 +22,27 @@ void initADC(enum AN_pin input, bool fast)
 	AD1CON2bits.ALTS   = 0;              // Always uses MUX A input multiplexer settings
 
 	AD1CON3bits.ADRC   = 0;              // Use system clock
-	// Number of A/D clock periods (T_ADs) to wait while sampling
-	// 1 if fast, 31 if slow
-	AD1CON3bits.SAMC   = (fast) ? 1 : 31;
-	// A/D clock prescaler. T_AD = ADCS * 2Tosc
-	// 1 if fast, 64 if slow
-	AD1CON3bits.ADCS   = (fast) ? 0 : 63;
+
+	if (fast && REFOCONbits.RODIV != 0b1111)  {
+		// Number of A/D clock periods (T_ADs) to wait while sampling
+		// 1 if fast, 31 if slow
+		AD1CON3bits.SAMC   = 1;
+
+		// A/D clock prescaler. T_AD = ADCS * 2Tosc
+		// 1 if fast, 64 if slow
+		AD1CON3bits.ADCS   = 0;
+	} else {
+		AD1CON3bits.SAMC   = 31;
+		AD1CON3bits.ADCS   = 63;
+	}
+
+
+
+//	if (REFOCONbits.RODIV == 0b1111) {
+//		AD1CON3bits.SAMC   = (fast) ? 1 : 31;
+//		AD1CON3bits.ADCS   = 63;
+//	}
+
 
 	AD1CHSbits.CH0NA   = 0;              // Channel 0 negative input is Vr- for MuxA
 	AD1CHSbits.CH0SA   = input;          // Set channel 0 positive input pin (input & 0b1111 would be safe)

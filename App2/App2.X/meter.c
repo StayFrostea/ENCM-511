@@ -12,6 +12,7 @@
 #include "ADC.h"
 #include "IOs.h"
 #include "ChangeClk.h"
+#include "TimeDelay.h"
 
 const float Vdd = 3.0;  // Supply voltage
 
@@ -21,6 +22,7 @@ void initVoltmeter(void)
 	initUART2();
 	initADC(AN5, false);
 	beginADC();
+	delay_ms(100, 1);
 	clearLine();
 }
 
@@ -66,6 +68,7 @@ void initOhmmeter(void)
 	initUART2();
 	initADC(AN11, false);
 	beginADC();
+	delay_ms(100, 1);
 	clearLine();
 }
 
@@ -94,6 +97,7 @@ void initPulsemeter(void)
 	initUART2();
 	initADC(AN12, true);
 	beginADC();
+	delay_ms(100, 1);
 	clearLine();
 }
 
@@ -142,7 +146,6 @@ void pulsemeter(bool do_init)
 	uint16_t last_edge_i    = 0;
 	bool prev_was_peak      = false;
 
-	printUART2("\\\\  ");
 	for (i = 0; i < ADC_BUF_LEN; i++) {
 		uint16_t s = buf[i];
 
@@ -156,10 +159,8 @@ void pulsemeter(bool do_init)
 					++peak_len_cnt;
 				}
 				last_edge_i = i;
-				writeUART2('|');
 			}
 			prev_was_peak = true;
-			writeUART2('~');
 		} else {
 
 			trough_avg += s;
@@ -169,13 +170,10 @@ void pulsemeter(bool do_init)
 					++trough_len_cnt;
 				}
 				last_edge_i = i;
-				writeUART2('|');
 			}
 			prev_was_peak = false;
-			writeUART2('_');
 		}
 	}
-	printUART2(" // \t");
 
 	// Calculate amplitude
 	peak_avg /= peak_avg_cnt;
@@ -194,12 +192,7 @@ void pulsemeter(bool do_init)
 	else
 		trough_len_avg = 0;
 
-	printUint(peak_len_avg, 2, false);
-	printUART2(" ");
-	printUint(trough_len_avg, 2, false);
-	printUART2(" ");
-
-	/* If we can see one or more cycles in our snapshot, we add the agerage peak and trough
+	/* If we can see one or more cycles in our snapshot, we add the average peak and trough
 	 * half periods to get one full period.
 	 * If we didn't get a view of a full cycle, one of the peak/trough averages will be zero,
 	 * As per the constraints in the previous section.  In this case, the sum can be taken,
@@ -223,11 +216,11 @@ void pulsemeter(bool do_init)
 			freq_kHz /= 2;
 	}
 
-	printUART2("\tPULSEMETER Freq = ");
+	printUART2("PULSEMETER Freq = ");
 	printFloat(freq_kHz);
-	printUART2(" kHz, \t\tAmplitude = ");
+	printUART2(" kHz, Amplitude = ");
 	printFloat(amp);
-	printUART2(" V\n");
+	printUART2(" V\r");
 }
 
 

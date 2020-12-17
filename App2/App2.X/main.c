@@ -60,10 +60,8 @@ int main(void)
 void init(void)
 {
 	#if MIDTERM
-		initRefOsc();
+		initRefOsc(2);
 	#endif
-	// TODO: Control clock according to macros
-	NewClk(8);  // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
 
 	initUART2();
 	initIO();

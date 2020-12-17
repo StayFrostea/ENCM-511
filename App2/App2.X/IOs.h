@@ -15,12 +15,7 @@
 #define LED (LATBbits.LATB8)
 
 void initIO(void);
-/*
-void IOcheck(void);
-void IOmain(void);
- */
-
-void initRefOsc(void);
+void initRefOsc(int test_setting);
 
 void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void);
 

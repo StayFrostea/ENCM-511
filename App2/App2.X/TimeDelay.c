@@ -47,7 +47,8 @@ void delay_ms(uint16_t time_ms, uint8_t idle_on)
 	T2CONbits.TON = 1;    // Start timer
 
 	if (idle_on)
-		Idle();
+		while (T2CONbits.TON)
+			Idle();
 }
 
 

@@ -292,6 +292,6 @@ void clearLine(void)
 /* Clear the previous line on the terminal. */
 {
 	writeUART2('\r');
-	nWriteUART2(' ', 50);  // Clear the previous line
+	nWriteUART2(' ', 80);  // Clear the previous line
 	writeUART2('\r');
 }
