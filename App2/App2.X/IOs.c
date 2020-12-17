@@ -52,49 +52,37 @@ void initIO(void)
 void initRefOsc(int test_setting)
 /* Set up the clock and reference oscillator */
 {
+
+	//Clock output on REFO/RB15
+	TRISBbits.TRISB15 = 0; // Set RB15 as output for REFO
+	REFOCONbits.ROSSLP = 1; // Ref oscillator is disabled in sleep
+	REFOCONbits.ROSEL = 0; // Output base clk showing clock switching
+
 	switch(test_setting) {
 		case 1:
 			///////////////PULSE TEST SETTING 1
-			// Change Clock
 			NewClk(8); // 8 for 8 MHz; 500 for 500 kHz; 32 for 32 kHz
-
-			//Clock output on REFO/RB15
-			TRISBbits.TRISB15 = 0; // Set RB15 as output for REFO
-			REFOCONbits.ROSSLP = 1; // Ref oscillator is disabled in sleep
-			REFOCONbits.ROSEL = 0; // Output base clk showing clock switching
 			REFOCONbits.RODIV = 0b1001;
-			REFOCONbits.ROEN = 1; // Ref oscillator is enabled
 			break;
 
 		case 2:
 			///////////////PULSE TEST SETTING 2
 			NewClk(8);
-			TRISBbits.TRISB15 = 0;
-			REFOCONbits.ROSSLP = 1;
-			REFOCONbits.ROSEL = 0;
 			REFOCONbits.RODIV = 0b1111;
-			REFOCONbits.ROEN = 1;
 			break;
 
 		case 3:
 			///////////////PULSE TEST SETTING 3
 			NewClk(500);
-			TRISBbits.TRISB15 = 0;
-			REFOCONbits.ROSSLP = 1;
-			REFOCONbits.ROSEL = 0;
 			REFOCONbits.RODIV = 0b1001;
-			REFOCONbits.ROEN = 1;
 			break;
 
 		case 4:
 			///////////////PULSE TEST SETTING 4
 			NewClk(500);
-			TRISBbits.TRISB15 = 0;
-			REFOCONbits.ROSSLP = 1;
-			REFOCONbits.ROSEL = 0;
 			REFOCONbits.RODIV = 0b0111;
-			REFOCONbits.ROEN = 1;
 	}
+	REFOCONbits.ROEN = 1; // Ref oscillator is enabled
 }
 
 

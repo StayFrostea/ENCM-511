@@ -15,6 +15,9 @@
 #include "ADC.h"
 #include "meter.h"
 
+// Easily switch between test cases
+#define TEST_CASE 1
+
 /* Conditional compilation of the pulse meter functionality.
  * Toggle this on and off to switch between App2 and the Midterm. */
 #define MIDTERM 1
@@ -60,7 +63,7 @@ int main(void)
 void init(void)
 {
 	#if MIDTERM
-		initRefOsc(2);
+		initRefOsc(TEST_CASE);
 	#endif
 
 	initUART2();
